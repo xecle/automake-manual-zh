@@ -938,54 +938,38 @@ occasionally.生成的 <samp>Makefile.in</samp> 是符合 GNU Makefile 标准的
 <h3 class="section">2.1、GNU 构建系统简介</h3>
 <a name="index-GNU-Build-System_002c-introduction"></a>
 
-<p>It is a truth universally acknowledged, that as a developer in
-possession of a new package, you must be in want of a build system.
+<p>一个广泛承认的事实是：如果你是一个新软件包的负责人，你一定想有一个构建系统。
 </p>
-<p>In the Unix world, such a build system is traditionally achieved using
-the command <code>make</code> (see <a href="http://www.gnu.org/software/make/manual/make.html#Top">Overview</a> in <cite>The GNU Make
-Manual</cite>).  You express the recipe to build your package in a
-<samp>Makefile</samp>.  This file is a set of rules to build the files in
-the package.  For instance the program <samp>prog</samp> may be built by
-running the linker on the files <samp>main.o</samp>, <samp>foo.o</samp>, and
-<samp>bar.o</samp>; the file <samp>main.o</samp> may be built by running the
-compiler on <samp>main.c</samp>; etc.  Each time <code>make</code> is run, it
-reads <samp>Makefile</samp>, checks the existence and modification time of
-the files mentioned, decides what files need to be built (or rebuilt),
-and runs the associated commands.
+<p>在 Unix 世界中，这样的一个构建系统通常是依靠 <code>make</code> (见 <cite>The GNU Make Manual</cite> 
+中 <a href="http://www.gnu.org/software/make/manual/make.html#Top">总览</a>)命令实现。
+在 <samp>Makefile</samp> 中描述你的软件包的构建方法。这个文件是构建该软件包中文件的命令的一个合集。
+示例中的程序 <samp>prog</samp> 就是对文件 <samp>main.o</samp> 、 <samp>foo.o</samp> 和
+<samp>bar.o</samp> 进行链接得到的；文件 <samp>main.o</samp> 是对 <samp>main.c</samp> 
+进行编译得到的；等等。每次运行 <code>make</code> ，它首先读取 <samp>Makefile</samp>，
+检查所有提到的文件是否存在以及更新时间来决定哪些文件需要构建(或者重新构建)，然后运行相关的命令。
 </p>
-<p>When a package needs to be built on a different platform than the one
-it was developed on, its <samp>Makefile</samp> usually needs to be adjusted.
-For instance the compiler may have another name or require more
-options.  In 1991, David J. MacKenzie got tired of customizing
-<samp>Makefile</samp> for the 20 platforms he had to deal with.  Instead, he
-handcrafted a little shell script called <samp>configure</samp> to
-automatically adjust the <samp>Makefile</samp> (see <a href="http://www.gnu.org/software/autoconf/manual/autoconf.html#Genesis">Genesis</a> in <cite>The Autoconf Manual</cite>).  Compiling his package was now
-as simple as running <code>./configure &amp;&amp; make</code>.
+<p>当一个软件包需要在其他不同于原本开发的平台上进行构建时，通常它的 <samp>Makefile</samp> 需要进行调整。
+比如编译器可能叫其他的名字或者需要更多的选项。1991 年，David J. MacKenzie 对他需要维护20个平台的 <samp>Makefile</samp> 感到厌倦，
+因此他写了一个小的 shell 脚本叫做 <samp>configure</samp> 来自动调整 <samp>Makefile</samp> (见 <cite>The Autoconf Manual</cite> 中 <a href="http://www.gnu.org/software/autoconf/manual/autoconf.html#Genesis">Genesis</a>)。现在编译他的软件包只需要简单的运行 <code>./configure &amp;&amp; make</code>。
 </p>
 <a name="index-GNU-Coding-Standards"></a>
 
-<p>Today this process has been standardized in the GNU project.  The GNU
-Coding Standards (see <a href="http://www.gnu.org/prep/standards/standards.html#Managing-Releases">The Release Process</a> in <cite>The GNU Coding Standards</cite>) explains how each package of the
-GNU project should have a <samp>configure</samp> script, and the minimal
-interface it should have.  The <samp>Makefile</samp> too should follow some
-established conventions.  The result?  A unified build system that
-makes all packages almost indistinguishable by the installer.  In its
-simplest scenario, all the installer has to do is to unpack the
-package, run <code>./configure &amp;&amp; make &amp;&amp; make install</code>, and repeat
-with the next package to install.
+<p>如今，这个过程在 GNU 项目中已经标准化。GNU 编码规范 
+(见 <cite>The GNU Coding Standards</cite> 中 <a href="http://www.gnu.org/prep/standards/standards.html#Managing-Releases">发布流程</a>) 
+解释了为什么 GNU 项目中每个软件包需要有一个 <samp>configure</samp> 脚本，
+以及应该有的最少的接口。<samp>Makefile</samp> 也应该遵循一些既定的约束。
+结果就是一个使所有软件包对安装者来说几乎完全一样的统一构建系统。
+在最理想的情况下，所有的安装者需要做的只是解压软件包，运行 <code>./configure &amp;&amp; make &amp;&amp; make install</code> 
+然后重复这个过程来安装下一个软件包。
 </p>
-<p>We call this build system the <em>GNU Build System</em>, since it was
-grown out of the GNU project.  However it is used by a vast number of
-other packages: following any existing convention has its advantages.
+<p>我们把这个构建系统叫做 <em>GNU 构建系统</em>，因为它发源于 GNU 项目。
+但是它却被大量的其他软件包使用：遵循已有的规范总是有好处的。
 </p>
 <a name="index-Autotools_002c-introduction"></a>
 
-<p>The Autotools are tools that will create a GNU Build System for your
-package.  Autoconf mostly focuses on <samp>configure</samp> and Automake on
-<samp>Makefile</samp>s.  It is entirely possible to create a GNU Build
-System without the help of these tools.  However it is rather
-burdensome and error-prone.  We will discuss this again after some
-illustration of the GNU Build System in action.
+<p>Autotools 是用来给你的软件包建立 GNU 构建系统的工具。Autoconf 主要关注 <samp>configure</samp>，
+Automake 主要关注 <samp>Makefile</samp>s。不依靠这些工具的帮助建立 GNU 构建系统也是完全可能的。
+但是这是很累赘和容易出错的。在完成几个 GNU 构建系统的实例后我们再来讨论这些。
 </p>
 <hr>
 <a name="Use-Cases"></a>
@@ -994,7 +978,7 @@ illustration of the GNU Build System in action.
 向后：<a href="#Why-Autotools" accesskey="n" rel="next">Why Autotools</a>, 向前：<a href="#GNU-Build-System" accesskey="p" rel="previous">GNU Build System</a>, 向上：<a href="#Autotools-Introduction" accesskey="u" rel="up">Autotools Introduction</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">目录</a>][<a href="#Indices" title="Index" rel="index">索引</a>]</p>
 </div>
 <a name="Use-Cases-for-the-GNU-Build-System"></a>
-<h3 class="section">2.2 Use Cases for the GNU Build System</h3>
+<h3 class="section">2.2 GNU 构建系统的使用实例</h3>
 <a name="index-GNU-Build-System_002c-use-cases"></a>
 <a name="index-GNU-Build-System_002c-features"></a>
 <a name="index-Features-of-the-GNU-Build-System"></a>
@@ -1002,52 +986,43 @@ illustration of the GNU Build System in action.
 <a name="index-amhello_002d1_002e0_002etar_002egz_002c-location"></a>
 <a name="index-amhello_002d1_002e0_002etar_002egz_002c-use-cases"></a>
 
-<p>In this section we explore several use cases for the GNU Build System.
-You can replay all of these examples on the <samp>amhello-1.0.tar.gz</samp>
-package distributed with Automake.  If Automake is installed on your
-system, you should find a copy of this file in
-<samp><var>prefix</var>/share/doc/automake/amhello-1.0.tar.gz</samp>, where
-<var>prefix</var> is the installation prefix specified during configuration
-(<var>prefix</var> defaults to <samp>/usr/local</samp>, however if Automake was
-installed by some GNU/Linux distribution it most likely has been set
-to <samp>/usr</samp>).  If you do not have a copy of Automake installed,
-you can find a copy of this file inside the <samp>doc/</samp> directory of
-the Automake package.
+<p>在这一节中我们将研究几个 GNU 构建系统的使用实例。
+你可以在随 Automake 发布的软件包 <samp>amhello-1.0.tar.gz</samp> 中重做所有示例。
+如果你的系统中已经安装 Automake，你可以在 <samp><var>prefix</var>/share/doc/automake/amhello-1.0.tar.gz</samp> 找到这个文件，
+其中的 <var>prefix</var> 是配置的安装路径前缀(<var>prefix</var> 默认是 <samp>/usr/local</samp>，
+但是如果 Automake 是通过一些 GNU/Linux 发行版安装的，它极有可能被设成 <samp>/usr</samp>)。
+如果你没有安装好的 Automake，你可以在 Automake 软件包的 <samp>doc/</samp> 目录下找到这个文件。
 </p>
-<p>Some of the following use cases present features that are in fact
-extensions to the GNU Build System.  Read: they are not specified by
-the GNU Coding Standards, but they are nonetheless part of the build
-system created by the Autotools.  To keep things simple, we do not
-point out the difference.  Our objective is to show you many of the
-features that the build system created by the Autotools will offer to
-you.
+<p>下面这些使用实例中展示的特性有一部分实际上是 GNU 构建系统的扩展。
+注意：它们在 GNU 编码规范中没有定义，但是它们仍然是由 Autotools 创建的构建系统中的一部分。
+为了简单起见，我们没有指出区别。我们主要是为了向你展示大部分由 Autotools 建立的构建系统将提供给你的特性。
 </p>
 <table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="#Basic-Installation" accesskey="1">Basic Installation</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Common installation procedure
+<tr><td align="left" valign="top">&bull; <a href="#Basic-Installation" accesskey="1">基本安装</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">通常的安装过程
 </td></tr>
-<tr><td align="left" valign="top">&bull; <a href="#Standard-Targets" accesskey="2">Standard Targets</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">A list of standard Makefile targets
+<tr><td align="left" valign="top">&bull; <a href="#Standard-Targets" accesskey="2">标准目标</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">一个标准 Makefile 目标的列表
 </td></tr>
-<tr><td align="left" valign="top">&bull; <a href="#Standard-Directory-Variables" accesskey="3">Standard Directory Variables</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">A list of standard directory variables
+<tr><td align="left" valign="top">&bull; <a href="#Standard-Directory-Variables" accesskey="3">标准目录变量</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">一个标准目录变量的列表
 </td></tr>
-<tr><td align="left" valign="top">&bull; <a href="#Standard-Configuration-Variables" accesskey="4">Standard Configuration Variables</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Using configuration variables
+<tr><td align="left" valign="top">&bull; <a href="#Standard-Configuration-Variables" accesskey="4">标准配置变量</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">使用配置变量
 </td></tr>
-<tr><td align="left" valign="top">&bull; <a href="#config_002esite" accesskey="5">config.site</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Using a config.site file
+<tr><td align="left" valign="top">&bull; <a href="#config_002esite" accesskey="5">config.site</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">使用一个 config.site 文件
 </td></tr>
-<tr><td align="left" valign="top">&bull; <a href="#VPATH-Builds" accesskey="6">VPATH Builds</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Parallel build trees
+<tr><td align="left" valign="top">&bull; <a href="#VPATH-Builds" accesskey="6">VPATH 构建</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">平行构建树
 </td></tr>
-<tr><td align="left" valign="top">&bull; <a href="#Two_002dPart-Install" accesskey="7">Two-Part Install</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Installing data and programs separately
+<tr><td align="left" valign="top">&bull; <a href="#Two_002dPart-Install" accesskey="7">两步安装</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">分别安装数据和程序
 </td></tr>
-<tr><td align="left" valign="top">&bull; <a href="#Cross_002dCompilation" accesskey="8">Cross-Compilation</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Building for other architectures
+<tr><td align="left" valign="top">&bull; <a href="#Cross_002dCompilation" accesskey="8">交叉编译</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">编译其他架构体系的版本
 </td></tr>
-<tr><td align="left" valign="top">&bull; <a href="#Renaming" accesskey="9">Renaming</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Renaming programs at install time
+<tr><td align="left" valign="top">&bull; <a href="#Renaming" accesskey="9">重命名</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">安装时重命名程序
 </td></tr>
-<tr><td align="left" valign="top">&bull; <a href="#DESTDIR">DESTDIR</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Building binary packages with DESTDIR
+<tr><td align="left" valign="top">&bull; <a href="#DESTDIR">DESTDIR</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">使用 DESTDIR 构建二进制包
 </td></tr>
-<tr><td align="left" valign="top">&bull; <a href="#Preparing-Distributions">Preparing Distributions</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Rolling out tarballs
+<tr><td align="left" valign="top">&bull; <a href="#Preparing-Distributions">发行准备</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">生成压缩包
 </td></tr>
-<tr><td align="left" valign="top">&bull; <a href="#Dependency-Tracking">Dependency Tracking</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Automatic dependency tracking
+<tr><td align="left" valign="top">&bull; <a href="#Dependency-Tracking">依赖跟踪</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">依赖自动跟踪
 </td></tr>
-<tr><td align="left" valign="top">&bull; <a href="#Nested-Packages">Nested Packages</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">The GNU Build Systems can be nested
+<tr><td align="left" valign="top">&bull; <a href="#Nested-Packages">软件包嵌套</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">GNU 构建系统可以嵌套
 </td></tr>
 </table>
 
@@ -1055,15 +1030,15 @@ you.
 <a name="Basic-Installation"></a>
 <div class="header">
 <p>
-向后：<a href="#Standard-Targets" accesskey="n" rel="next">Standard Targets</a>, 向上：<a href="#Use-Cases" accesskey="u" rel="up">Use Cases</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">目录</a>][<a href="#Indices" title="Index" rel="index">索引</a>]</p>
+向后：<a href="#Standard-Targets" accesskey="n" rel="next">标准目标</a>, 向上：<a href="#Use-Cases" accesskey="u" rel="up">使用实例</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">目录</a>][<a href="#Indices" title="Index" rel="index">索引</a>]</p>
 </div>
 <a name="Basic-Installation-1"></a>
-<h4 class="subsection">2.2.1 Basic Installation</h4>
+<h4 class="subsection">2.2.1 基本安装</h4>
 <a name="index-Configuration_002c-basics"></a>
 <a name="index-Installation_002c-basics"></a>
 <a name="index-GNU-Build-System_002c-basics"></a>
 
-<p>The most common installation procedure looks as follows.
+<p>最常见的安装过程是像下面这样。
 </p>
 <div class="example">
 <pre class="example">~ % <kbd>tar zxf amhello-1.0.tar.gz</kbd>
@@ -1088,20 +1063,15 @@ Password:
 
 <a name="index-Unpacking"></a>
 
-<p>The user first unpacks the package.  Here, and in the following
-examples, we will use the non-portable <code>tar zxf</code> command for
-simplicity.  On a system without GNU <code>tar</code> installed, this
-command should read <code>gunzip -c amhello-1.0.tar.gz | tar xf -</code>.
+<p>用户首先解压软件包。这里以及下面的例子，我们使用平台兼容的 <code>tar zxf</code> 命令来简化。
+在一个没有安装 GNU <code>tar</code> 的系统中，这个命令应该是 <code>gunzip -c amhello-1.0.tar.gz | tar xf -</code>。
 </p>
-<p>The user then enters the newly created directory to run the
-<samp>configure</samp> script.  This script probes the system for various
-features, and finally creates the <samp>Makefile</samp>s.  In this toy
-example there are only two <samp>Makefile</samp>s, but in real-world projects,
-there may be many more, usually one <samp>Makefile</samp> per directory.
+<p>然后用户进入到新建立的目录中运行 <samp>configure</samp> 脚本。
+这个脚本检测一系列的系统特性，最终生成 <samp>Makefile</samp>s。
+在这个试玩的例子中仅仅有两个 <samp>Makefile</samp>，但在真正的项目中可能会有很多，通常每个文件夹一个 <samp>Makefile</samp>。
 </p>
-<p>It is now possible to run <code>make</code>.  This will construct all the
-programs, libraries, and scripts that need to be constructed for the
-package.  In our example, this compiles the <samp>hello</samp> program.
+<p>现在可以运行 <code>make</code> 了。这将构造软件包需要的所有程序、库以及脚本。
+在我们的例子中，这将编译 <samp>hello</samp> 程序。
 All files are constructed in place, in the source tree; we will see
 later how this can be changed.
 </p>
