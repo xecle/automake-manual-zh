@@ -81,7 +81,7 @@ ul.no-bullet {list-style: none}
   <li><a name="toc-An-Introduction-to-the-Autotools" href="#Autotools-Introduction">2 An Introduction to the Autotools</a>
   <ul class="no-bullet">
     <li><a name="toc-Introducing-the-GNU-Build-System" href="#GNU-Build-System">2.1 Introducing the GNU Build System</a></li>
-    <li><a name="toc-Use-Cases-for-the-GNU-Build-System" href="#Use-Cases">2.2 Use Cases for the GNU Build System</a>
+    <li><a name="toc-Use-Cases-for-the-GNU-Build-System" href="#Use-Cases">2.2 使用实例 for the GNU Build System</a>
     <ul class="no-bullet">
       <li><a name="toc-Basic-Installation-1" href="#Basic-Installation">2.2.1 Basic Installation</a></li>
       <li><a name="toc-Standard-Makefile-Targets" href="#Standard-Targets">2.2.2 Standard <samp>Makefile</samp> Targets</a></li>
@@ -436,14 +436,14 @@ An Introduction to the Autotools
 
 </pre></th></tr><tr><td align="left" valign="top">&bull; <a href="#GNU-Build-System">GNU Build System</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Introducing the GNU Build System
 </td></tr>
-<tr><td align="left" valign="top">&bull; <a href="#Use-Cases">Use Cases</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Use Cases for the GNU Build System
+<tr><td align="left" valign="top">&bull; <a href="#Use-Cases">使用实例</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">使用实例 for the GNU Build System
 </td></tr>
 <tr><td align="left" valign="top">&bull; <a href="#Why-Autotools">Why Autotools</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How Autotools Help
 </td></tr>
 <tr><td align="left" valign="top">&bull; <a href="#Hello-World">Hello World</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">A Small Hello World Package
 </td></tr>
 <tr><th colspan="3" align="left" valign="top"><pre class="menu-comment">
-Use Cases for the GNU Build System
+使用实例 for the GNU Build System
 
 </pre></th></tr><tr><td align="left" valign="top">&bull; <a href="#Basic-Installation">Basic Installation</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Common installation procedure
 </td></tr>
@@ -1072,105 +1072,93 @@ Password:
 </p>
 <p>现在可以运行 <code>make</code> 了。这将构造软件包需要的所有程序、库以及脚本。
 在我们的例子中，这将编译 <samp>hello</samp> 程序。
-All files are constructed in place, in the source tree; we will see
-later how this can be changed.
+所有的文件都将在代码树中的位置被编译；后面我们将看到如何改变这一点。
 </p>
-<p><code>make check</code> causes the package&rsquo;s tests to be run.  This step is
-not mandatory, but it is often good to make sure the programs that
-have been built behave as they should, before you decide to install
-them.  Our example does not contain any tests, so running <code>make
-check</code> is a no-op.
+<p><code>make check</code> 将会对软件包进行检测。这一步不是必须的，
+但是在你决定安装之前用来确认程序按照预期进行了编译是很好用的。
+我们的例子不包含任何检测，因此运行 <code>make
+check</code> 没有效果。
 </p>
 <a name="index-su_002c-before-make-install"></a>
-<p>After everything has been built, and maybe tested, it is time to
-install it on the system.  That means copying the programs,
-libraries, header files, scripts, and other data files from the
-source directory to their final destination on the system.  The
-command <code>make install</code> will do that.  However, by default
-everything will be installed in subdirectories of <samp>/usr/local</samp>:
-binaries will go into <samp>/usr/local/bin</samp>, libraries will end up in
-<samp>/usr/local/lib</samp>, etc.  This destination is usually not writable
-by any user, so we assume that we have to become root before we can
-run <code>make install</code>.  In our example, running <code>make install</code>
-will copy the program <samp>hello</samp> into <samp>/usr/local/bin</samp>
-and <samp>README</samp> into <samp>/usr/local/share/doc/amhello</samp>.
+<p>在构建了所有东西或许还进行了测试以后，就该把它安装到系统中了。
+意思是从源代码目录中拷贝所有的程序、库、头文件、脚本和其他数据文件到他们最终应该在系统中的位置。
+命令 <code>make install</code> 就是做这个的。
+但是，默认情况下所有的东西都会安装在 <samp>/usr/local</samp> 的子目录中：
+二进制文件在 <samp>/usr/local/bin</samp> 中，
+库文件在 <samp>/usr/local/lib</samp> 中，其他与之类似。
+这个位置对普通用户通常是没有写入权限的，
+因此我们假设在运行 <code>make install</code> 之前我们已经提升为root权限。
+在我们的例子中，运行 <code>make install</code> 将拷贝程序 <samp>hello</samp> 到 <samp>/usr/local/bin</samp>
+以及 <samp>README</samp> 到 <samp>/usr/local/share/doc/amhello</samp>。
 </p>
-<p>A last and optional step is to run <code>make installcheck</code>.  This
-command may run tests on the installed files.  <code>make check</code> tests
-the files in the source tree, while <code>make installcheck</code> tests
-their installed copies.  The tests run by the latter can be different
-from those run by the former.  For instance, there are tests that
-cannot be run in the source tree.  Conversely, some packages are set
-up so that <code>make installcheck</code> will run the very same tests as
-<code>make check</code>, only on different files (non-installed
-vs. installed).  It can make a difference, for instance when the
-source tree&rsquo;s layout is different from that of the installation.
-Furthermore it may help to diagnose an incomplete installation.
+<p>最后一个可选的是运行 <code>make installcheck</code>。
+这条命令会运行对已安装文件的检测。<code>make check</code> 对源代码中的文件进行检测，
+而 <code>make installcheck</code> 检测他们的安装拷贝。
+后面运行的检测和前面的是不同的， 比如有些检测是不能在代码树中运行的。
+相反的，安装一些软件包后 <code>make installcheck</code> 
+和 <code>make check</code> 会运行非常相似的检测, 只是针对不同的文件(安装前和安装后)。
+这也会有些差异，比如代码树结构和安装结构不同。
+此外，它也可以帮助诊断不正确的安装。
 </p>
-<p>Presently most packages do not have any <code>installcheck</code> tests
-because the existence of <code>installcheck</code> is little known, and its
-usefulness is neglected.  Our little toy package is no better: <code>make
-installcheck</code> does nothing.
+<p>目前大多数软件包都没有任何 <code>installcheck</code> 检测，
+因为 <code>installcheck</code> 的存在很少有人知道并且它的用处被忽略了。
+我们试玩的软件包也没好到那里：<code>make installcheck</code> 没有做任何事情。
 </p>
 <hr>
 <a name="Standard-Targets"></a>
 <div class="header">
 <p>
-向后：<a href="#Standard-Directory-Variables" accesskey="n" rel="next">Standard Directory Variables</a>, 向前：<a href="#Basic-Installation" accesskey="p" rel="previous">Basic Installation</a>, 向上：<a href="#Use-Cases" accesskey="u" rel="up">Use Cases</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">目录</a>][<a href="#Indices" title="Index" rel="index">索引</a>]</p>
+向后：<a href="#Standard-Directory-Variables" accesskey="n" rel="next">标准目录变量</a>, 向前：<a href="#Basic-Installation" accesskey="p" rel="previous">基本安装</a>, 向上：<a href="#Use-Cases" accesskey="u" rel="up">使用例</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">目录</a>][<a href="#Indices" title="Index" rel="index">索引</a>]</p>
 </div>
 <a name="Standard-Makefile-Targets"></a>
-<h4 class="subsection">2.2.2 Standard <samp>Makefile</samp> Targets</h4>
+<h4 class="subsection">2.2.2 标准 <samp>Makefile</samp> 目标</h4>
 
-<p>So far we have come across four ways to run <code>make</code> in the GNU
-Build System: <code>make</code>, <code>make check</code>, <code>make install</code>, and
-<code>make installcheck</code>.  The words <code>check</code>, <code>install</code>, and
-<code>installcheck</code>, passed as arguments to <code>make</code>, are called
-<em>targets</em>.  <code>make</code> is a shorthand for <code>make all</code>,
-<code>all</code> being the default target in the GNU Build System.
+<p>到目前为止，我们已经遇到了四种在 GNU 构建系统中运行 <code>make</code> 的方式：
+<code>make</code>、<code>make check</code>、<code>make install</code>和
+<code>make installcheck</code>。单词 <code>check</code>、<code>install</code>、
+<code>installcheck</code>，作为参数传递给 <code>make</code>，叫做
+<em>目标</em>。<code>make</code> 是 <code>make all</code> 的简写，
+<code>all</code> 在 GNU 构建系统中是默认目标。
 </p>
-<p>Here is a list of the most useful targets that the GNU Coding Standards
-specify.
+<p>这里有一个 GNU 编码规范定义的最常用目标的列表。
 </p>
 <dl compact="compact">
 <dt><code>make all</code></dt>
 <dd><a name="index-all"></a>
-<p>Build programs, libraries, documentation, etc. (same as <code>make</code>).
+<p>编译程序，库，文档，等等。(等同于 <code>make</code>)。
 </p></dd>
 <dt><code>make install</code></dt>
 <dd><a name="index-install"></a>
-<p>Install what needs to be installed, copying the files from the
-package&rsquo;s tree to system-wide directories.
+<p>安装需要安装的东西，拷贝软件包中的文件到系统目录。
 </p></dd>
 <dt><code>make install-strip</code></dt>
 <dd><a name="index-install_002dstrip"></a>
-<p>Same as <code>make install</code>, then strip debugging symbols.  Some
-users like to trade space for useful bug reports<small class="enddots">...</small>
+<p>等同于 <code>make install</code>， 然后移除调试符号。一些用户喜欢没有 bug 报告来节省空间<small class="enddots">...</small>
 </p></dd>
 <dt><code>make uninstall</code></dt>
 <dd><a name="index-uninstall"></a>
-<p>The opposite of <code>make install</code>: erase the installed files.
-(This needs to be run from the same build tree that was installed.)
+<p> <code>make install</code> 的反向操作：删除已经安装的文件。
+(这需要从安装时使用的同一个目录中运行。)
 </p></dd>
 <dt><code>make clean</code></dt>
 <dd><a name="index-clean"></a>
-<p>Erase from the build tree the files built by <code>make all</code>.
+<p>删除构建树中 <code>make all</code> 命令生成的文件。
 </p></dd>
 <dt><code>make distclean</code></dt>
 <dd><a name="index-distclean"></a>
-<p>Additionally erase anything <code>./configure</code> created.
+<p>删除所有 <code>./configure</code> 创建的文件。
 </p></dd>
 <dt><code>make check</code></dt>
 <dd><a name="index-check"></a>
-<p>Run the test suite, if any.
+<p>运行检测例，如果有的话。
 </p></dd>
 <dt><code>make installcheck</code></dt>
 <dd><a name="index-installcheck"></a>
-<p>Check the installed programs or libraries, if supported.
+<p>检测已经安装的程序和库，如果支持的话。
 </p></dd>
 <dt><code>make dist</code></dt>
 <dd><a name="index-dist"></a>
-<p>Recreate <samp><var>package</var>-<var>version</var>.tar.gz</samp> from all the source
-files.
+<p>从全部源代码文件重新生成 <samp><var>软件包</var>-<var>版本</var>.tar.gz</samp>。
 </p></dd>
 </dl>
 
@@ -1178,46 +1166,40 @@ files.
 <a name="Standard-Directory-Variables"></a>
 <div class="header">
 <p>
-向后：<a href="#Standard-Configuration-Variables" accesskey="n" rel="next">Standard Configuration Variables</a>, 向前：<a href="#Standard-Targets" accesskey="p" rel="previous">Standard Targets</a>, 向上：<a href="#Use-Cases" accesskey="u" rel="up">Use Cases</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">目录</a>][<a href="#Indices" title="Index" rel="index">索引</a>]</p>
+向后：<a href="#Standard-Configuration-Variables" accesskey="n" rel="next">标准配置变量</a>, 向前：<a href="#Standard-Targets" accesskey="p" rel="previous">标准目标</a>, 向上：<a href="#Use-Cases" accesskey="u" rel="up">使用实例</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">目录</a>][<a href="#Indices" title="Index" rel="index">索引</a>]</p>
 </div>
 <a name="Standard-Directory-Variables-1"></a>
-<h4 class="subsection">2.2.3 Standard Directory Variables</h4>
+<h4 class="subsection">2.2.3 标准目录变量</h4>
 <a name="index-directory-variables"></a>
 
-<p>The GNU Coding Standards also specify a hierarchy of variables to
-denote installation directories.  Some of these are:
+<p>GNU 编码规范也定义了一整套的变量来指示安装目录。其中一些是： 
 </p>
 <table>
-<thead><tr><th>Directory variable</th><th>Default value</th></tr></thead>
-<tr><td><code>prefix</code></td><td><code>/usr/local</code></td></tr>
-<tr><td>&nbsp;&nbsp;<code><span class="nolinebreak">exec_prefix</span></code><!-- /@w --></td><td><code>${prefix}</code></td></tr>
-<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;<code>bindir</code><!-- /@w --></td><td><code>${exec_prefix}/bin</code></td></tr>
-<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;<code>libdir</code><!-- /@w --></td><td><code>${exec_prefix}/lib</code></td></tr>
-<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&hellip;<!-- /@w --></td></tr>
-<tr><td>&nbsp;&nbsp;<code>includedir</code><!-- /@w --></td><td><code>${prefix}/include</code></td></tr>
-<tr><td>&nbsp;&nbsp;<code>datarootdir</code><!-- /@w --></td><td><code>${prefix}/share</code></td></tr>
-<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;<code>datadir</code><!-- /@w --></td><td><code>${datarootdir}</code></td></tr>
-<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;<code>mandir</code><!-- /@w --></td><td><code>${datarootdir}/man</code></td></tr>
-<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;<code>infodir</code><!-- /@w --></td><td><code>${datarootdir}/info</code></td></tr>
-<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;<code>docdir</code><!-- /@w --></td><td><code>${datarootdir}/doc/${PACKAGE}</code></td></tr>
-<tr><td>&nbsp;&nbsp;&hellip;<!-- /@w --></td></tr>
+<thead><tr><th width=160px align=center >目录变量</th><th align=left>默认值</th></tr></thead>
+<tr><td align=center ><code>prefix</code></td><td><code>/usr/local</code></td></tr>
+<tr><td align=center ><code><span class="nolinebreak">exec_prefix</span></code><!-- /@w --></td><td><code>${prefix}</code></td></tr>
+<tr><td align=center ><code>bindir</code><!-- /@w --></td><td><code>${exec_prefix}/bin</code></td></tr>
+<tr><td align=center ><code>libdir</code><!-- /@w --></td><td><code>${exec_prefix}/lib</code></td></tr>
+<tr><td align=center >&hellip;<!-- /@w --></td></tr>
+<tr><td align=center ><code>includedir</code><!-- /@w --></td><td><code>${prefix}/include</code></td></tr>
+<tr><td align=center ><code>datarootdir</code><!-- /@w --></td><td><code>${prefix}/share</code></td></tr>
+<tr><td align=center ><code>datadir</code><!-- /@w --></td><td><code>${datarootdir}</code></td></tr>
+<tr><td align=center ><code>mandir</code><!-- /@w --></td><td><code>${datarootdir}/man</code></td></tr>
+<tr><td align=center ><code>infodir</code><!-- /@w --></td><td><code>${datarootdir}/info</code></td></tr>
+<tr><td align=center ><code>docdir</code><!-- /@w --></td><td><code>${datarootdir}/doc/${PACKAGE}</code></td></tr>
+<tr><td align=center >&hellip;<!-- /@w --></td></tr>
 </table>
 
 
-<p>Each of these directories has a role which is often obvious from its
-name.  In a package, any installable file will be installed in one of
-these directories.  For instance in <code>amhello-1.0</code>, the program
-<samp>hello</samp> is to be installed in <var>bindir</var>, the directory for
-binaries.  The default value for this directory is
-<samp>/usr/local/bin</samp>, but the user can supply a different value when
-calling <code>configure</code>.  Also the file <samp>README</samp> will be
-installed into <var>docdir</var>, which defaults to
-<samp>/usr/local/share/doc/amhello</samp>.
+<p>这些目录中的每一个都有一个可以从名称中看出来的角色。
+在一个软件包中，任何可以安装的的文件都将安装在这些目录其中一个。
+比如在 <code>amhello-1.0</code> 中，程序 <samp>hello</samp> 被安装在二进制目录 <var>bindir</var> 中，
+这个目录的默认值是 <samp>/usr/local/bin</samp>，但是用户在执行可以 <code>configure</code> 时提供一个不同的值。
+同样文件 <samp>README</samp> 将被安装在 <var>docdir</var> 目录中， 默认是 <samp>/usr/local/share/doc/amhello</samp>。
 </p>
 <a name="index-_002d_002dprefix"></a>
 
-<p>As a user, if you wish to install a package on your own account, you
-could proceed as follows:
+<p>作为一个用户，如果你希望将软件包安装在自己的账户下，你可以像下面这样处理：
 </p>
 <div class="example">
 <pre class="example">~/amhello-1.0 % <kbd>./configure --prefix ~/usr</kbd>
@@ -1228,75 +1210,70 @@ could proceed as follows:
 &hellip;
 </pre></div>
 
-<p>This would install <samp>~/usr/bin/hello</samp> and
-<samp>~/usr/share/doc/amhello/README</samp>.
+<p>这将安装 <samp>~/usr/bin/hello</samp> 和
+<samp>~/usr/share/doc/amhello/README</samp>。
 </p>
-<p>The list of all such directory options is shown by
-<code>./configure --help</code>.
+<p>所有这些目录选项的列表可以用命令 <code>./configure --help</code> 列出。
 </p>
 <hr>
 <a name="Standard-Configuration-Variables"></a>
 <div class="header">
 <p>
-向后：<a href="#config_002esite" accesskey="n" rel="next">config.site</a>, 向前：<a href="#Standard-Directory-Variables" accesskey="p" rel="previous">Standard Directory Variables</a>, 向上：<a href="#Use-Cases" accesskey="u" rel="up">Use Cases</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">目录</a>][<a href="#Indices" title="Index" rel="index">索引</a>]</p>
+向后：<a href="#config_002esite" accesskey="n" rel="next">config.site</a>, 向前：<a href="#Standard-Directory-Variables" accesskey="p" rel="previous">标准目录变量</a>, 向上：<a href="#Use-Cases" accesskey="u" rel="up">使用实例</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">目录</a>][<a href="#Indices" title="Index" rel="index">索引</a>]</p>
 </div>
 <a name="Standard-Configuration-Variables-1"></a>
-<h4 class="subsection">2.2.4 Standard Configuration Variables</h4>
+<h4 class="subsection">2.2.4 标准配置变量</h4>
 <a name="index-configuration-variables_002c-overriding"></a>
 
-<p>The GNU Coding Standards also define a set of standard configuration
-variables used during the build.  Here are some:
+<p>GNU 编码规范同样定义了一系列构建时使用的的标准配置变量，其中一些是：
 </p>
 <dl compact="compact">
 <dt><code>CC</code></dt>
-<dd><p>C compiler command
+<dd><p>C 编译器命令
 </p></dd>
 <dt><code>CFLAGS</code></dt>
-<dd><p>C compiler flags
+<dd><p>C 编译器标志
 </p></dd>
 <dt><code>CXX</code></dt>
-<dd><p>C++ compiler command
+<dd><p>C++ 编译器命令
 </p></dd>
 <dt><code>CXXFLAGS</code></dt>
-<dd><p>C++ compiler flags
+<dd><p>C++ 编译器标志
 </p></dd>
 <dt><code>LDFLAGS</code></dt>
-<dd><p>linker flags
+<dd><p>连接器标志
 </p></dd>
 <dt><code>CPPFLAGS</code></dt>
-<dd><p>C/C++ preprocessor flags
+<dd><p>C/C++ 预处理器标志
 </p></dd>
 <dt>&hellip;</dt>
 </dl>
 
-<p><code>configure</code> usually does a good job at setting appropriate
-values for these variables, but there are cases where you may want to
-override them.  For instance you may have several versions of a
-compiler installed and would like to use another one, you may have
-header files installed outside the default search path of the
-compiler, or even libraries out of the way of the linker.
+<p><code>configure</code> 通常在给这些变量设置正确值方面做的很好，但是有时候你希望覆盖他们。
+比如你安装了一个编译器的好几个版本并且想使用另一个，
+你可能有一些头文件安装在编译器默认搜索路径以外，
+或者是链接器搜索路径以外的库。
 </p>
-<p>Here is how one would call <code>configure</code> to force it to use
-<code>gcc-3</code> as C compiler, use header files from
-<samp>~/usr/include</samp> when compiling, and libraries from
-<samp>~/usr/lib</samp> when linking.
+<p>这里是如何调用 <code>configure</code> 来强制使用
+<code>gcc-3</code> 作为 C 编译器， 编译时使用
+<samp>~/usr/include</samp> 中的头文件以及链接时使用
+<samp>~/usr/lib</samp> 中的库。
 </p>
 <div class="example">
 <pre class="example">~/amhello-1.0 % <kbd>./configure --prefix ~/usr CC=gcc-3 \
 CPPFLAGS=-I$HOME/usr/include LDFLAGS=-L$HOME/usr/lib</kbd>
 </pre></div>
 
-<p>Again, a full list of these variables appears in the output of
-<code>./configure --help</code>.
+<p>同样的，<code>./configure --help</code> 的输出中有这些变量的完整列表。
 </p>
 <hr>
 <a name="config_002esite"></a>
 <div class="header">
 <p>
-向后：<a href="#VPATH-Builds" accesskey="n" rel="next">VPATH Builds</a>, 向前：<a href="#Standard-Configuration-Variables" accesskey="p" rel="previous">Standard Configuration Variables</a>, 向上：<a href="#Use-Cases" accesskey="u" rel="up">Use Cases</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">目录</a>][<a href="#Indices" title="Index" rel="index">索引</a>]</p>
+向后：<a href="#VPATH-Builds" accesskey="n" rel="next">VPATH Builds</a>, 向前：<a href="#Standard-Configuration-Variables" accesskey="p" rel="previous">Standard Configuration Variables</a>, 向上：<a href="#Use-Cases" accesskey="u" rel="up">使用实例</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">目录</a>][<a href="#Indices" title="Index" rel="index">索引</a>]</p>
 </div>
 <a name="Overriding-Default-Configuration-Setting-with-config_002esite"></a>
-<h4 class="subsection">2.2.5 Overriding Default Configuration Setting with <samp>config.site</samp></h4>
+<h4 class="subsection">2.2.5 使用 <samp>config.site</samp> 覆盖默认配置</h4>
 <a name="index-config_002esite-example"></a>
 
 <p>When installing several packages using the same setup, it can be
@@ -1340,7 +1317,7 @@ Manual</cite>, for more information about this feature.
 <a name="VPATH-Builds"></a>
 <div class="header">
 <p>
-向后：<a href="#Two_002dPart-Install" accesskey="n" rel="next">Two-Part Install</a>, 向前：<a href="#config_002esite" accesskey="p" rel="previous">config.site</a>, 向上：<a href="#Use-Cases" accesskey="u" rel="up">Use Cases</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">目录</a>][<a href="#Indices" title="Index" rel="index">索引</a>]</p>
+向后：<a href="#Two_002dPart-Install" accesskey="n" rel="next">Two-Part Install</a>, 向前：<a href="#config_002esite" accesskey="p" rel="previous">config.site</a>, 向上：<a href="#Use-Cases" accesskey="u" rel="up">使用实例</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">目录</a>][<a href="#Indices" title="Index" rel="index">索引</a>]</p>
 </div>
 <a name="Parallel-Build-Trees-_0028a_002ek_002ea_002e-VPATH-Builds_0029"></a>
 <h4 class="subsection">2.2.6 Parallel Build Trees (a.k.a. VPATH Builds)</h4>
@@ -1462,7 +1439,7 @@ project grew so big.)
 <a name="Two_002dPart-Install"></a>
 <div class="header">
 <p>
-向后：<a href="#Cross_002dCompilation" accesskey="n" rel="next">Cross-Compilation</a>, 向前：<a href="#VPATH-Builds" accesskey="p" rel="previous">VPATH Builds</a>, 向上：<a href="#Use-Cases" accesskey="u" rel="up">Use Cases</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">目录</a>][<a href="#Indices" title="Index" rel="index">索引</a>]</p>
+向后：<a href="#Cross_002dCompilation" accesskey="n" rel="next">Cross-Compilation</a>, 向前：<a href="#VPATH-Builds" accesskey="p" rel="previous">VPATH Builds</a>, 向上：<a href="#Use-Cases" accesskey="u" rel="up">使用实例</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">目录</a>][<a href="#Indices" title="Index" rel="index">索引</a>]</p>
 </div>
 <a name="Two_002dPart-Installation"></a>
 <h4 class="subsection">2.2.7 Two-Part Installation</h4>
@@ -1527,7 +1504,7 @@ the package works correctly despite the apparent partial installation.
 <a name="Cross_002dCompilation"></a>
 <div class="header">
 <p>
-向后：<a href="#Renaming" accesskey="n" rel="next">Renaming</a>, 向前：<a href="#Two_002dPart-Install" accesskey="p" rel="previous">Two-Part Install</a>, 向上：<a href="#Use-Cases" accesskey="u" rel="up">Use Cases</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">目录</a>][<a href="#Indices" title="Index" rel="index">索引</a>]</p>
+向后：<a href="#Renaming" accesskey="n" rel="next">Renaming</a>, 向前：<a href="#Two_002dPart-Install" accesskey="p" rel="previous">Two-Part Install</a>, 向上：<a href="#Use-Cases" accesskey="u" rel="up">使用实例</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">目录</a>][<a href="#Indices" title="Index" rel="index">索引</a>]</p>
 </div>
 <a name="Cross_002dCompilation-1"></a>
 <h4 class="subsection">2.2.8 Cross-Compilation</h4>
@@ -1614,7 +1591,7 @@ options.
 <a name="Renaming"></a>
 <div class="header">
 <p>
-向后：<a href="#DESTDIR" accesskey="n" rel="next">DESTDIR</a>, 向前：<a href="#Cross_002dCompilation" accesskey="p" rel="previous">Cross-Compilation</a>, 向上：<a href="#Use-Cases" accesskey="u" rel="up">Use Cases</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">目录</a>][<a href="#Indices" title="Index" rel="index">索引</a>]</p>
+向后：<a href="#DESTDIR" accesskey="n" rel="next">DESTDIR</a>, 向前：<a href="#Cross_002dCompilation" accesskey="p" rel="previous">Cross-Compilation</a>, 向上：<a href="#Use-Cases" accesskey="u" rel="up">使用实例</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">目录</a>][<a href="#Indices" title="Index" rel="index">索引</a>]</p>
 </div>
 <a name="Renaming-Programs-at-Install-Time"></a>
 <h4 class="subsection">2.2.9 Renaming Programs at Install Time</h4>
@@ -1663,7 +1640,7 @@ as <samp>/usr/local/bin/test-hello</samp>, for instance.
 <a name="DESTDIR"></a>
 <div class="header">
 <p>
-向后：<a href="#Preparing-Distributions" accesskey="n" rel="next">Preparing Distributions</a>, 向前：<a href="#Renaming" accesskey="p" rel="previous">Renaming</a>, 向上：<a href="#Use-Cases" accesskey="u" rel="up">Use Cases</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">目录</a>][<a href="#Indices" title="Index" rel="index">索引</a>]</p>
+向后：<a href="#Preparing-Distributions" accesskey="n" rel="next">Preparing Distributions</a>, 向前：<a href="#Renaming" accesskey="p" rel="previous">Renaming</a>, 向上：<a href="#Use-Cases" accesskey="u" rel="up">使用实例</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">目录</a>][<a href="#Indices" title="Index" rel="index">索引</a>]</p>
 </div>
 <a name="Building-Binary-Packages-Using-DESTDIR"></a>
 <h4 class="subsection">2.2.10 Building Binary Packages Using DESTDIR</h4>
@@ -1726,7 +1703,7 @@ architecture-independent files in a single package.
 <a name="Preparing-Distributions"></a>
 <div class="header">
 <p>
-向后：<a href="#Dependency-Tracking" accesskey="n" rel="next">Dependency Tracking</a>, 向前：<a href="#DESTDIR" accesskey="p" rel="previous">DESTDIR</a>, 向上：<a href="#Use-Cases" accesskey="u" rel="up">Use Cases</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">目录</a>][<a href="#Indices" title="Index" rel="index">索引</a>]</p>
+向后：<a href="#Dependency-Tracking" accesskey="n" rel="next">Dependency Tracking</a>, 向前：<a href="#DESTDIR" accesskey="p" rel="previous">DESTDIR</a>, 向上：<a href="#Use-Cases" accesskey="u" rel="up">使用实例</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">目录</a>][<a href="#Indices" title="Index" rel="index">索引</a>]</p>
 </div>
 <a name="Preparing-Distributions-1"></a>
 <h4 class="subsection">2.2.11 Preparing Distributions</h4>
@@ -1778,7 +1755,7 @@ information about <code>distcheck</code>.
 <a name="Dependency-Tracking"></a>
 <div class="header">
 <p>
-向后：<a href="#Nested-Packages" accesskey="n" rel="next">Nested Packages</a>, 向前：<a href="#Preparing-Distributions" accesskey="p" rel="previous">Preparing Distributions</a>, 向上：<a href="#Use-Cases" accesskey="u" rel="up">Use Cases</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">目录</a>][<a href="#Indices" title="Index" rel="index">索引</a>]</p>
+向后：<a href="#Nested-Packages" accesskey="n" rel="next">Nested Packages</a>, 向前：<a href="#Preparing-Distributions" accesskey="p" rel="previous">Preparing Distributions</a>, 向上：<a href="#Use-Cases" accesskey="u" rel="up">使用实例</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">目录</a>][<a href="#Indices" title="Index" rel="index">索引</a>]</p>
 </div>
 <a name="Automatic-Dependency-Tracking"></a>
 <h4 class="subsection">2.2.12 Automatic Dependency Tracking</h4>
@@ -1841,7 +1818,7 @@ the different dependency tracking schemes used by Automake over the years.
 <a name="Nested-Packages"></a>
 <div class="header">
 <p>
-向前：<a href="#Dependency-Tracking" accesskey="p" rel="previous">Dependency Tracking</a>, 向上：<a href="#Use-Cases" accesskey="u" rel="up">Use Cases</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">目录</a>][<a href="#Indices" title="Index" rel="index">索引</a>]</p>
+向前：<a href="#Dependency-Tracking" accesskey="p" rel="previous">Dependency Tracking</a>, 向上：<a href="#Use-Cases" accesskey="u" rel="up">使用实例</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">目录</a>][<a href="#Indices" title="Index" rel="index">索引</a>]</p>
 </div>
 <a name="Nested-Packages-1"></a>
 <h4 class="subsection">2.2.13 Nested Packages</h4>
@@ -1886,7 +1863,7 @@ the options supported by all the included packages.
 <a name="Why-Autotools"></a>
 <div class="header">
 <p>
-向后：<a href="#Hello-World" accesskey="n" rel="next">Hello World</a>, 向前：<a href="#Use-Cases" accesskey="p" rel="previous">Use Cases</a>, 向上：<a href="#Autotools-Introduction" accesskey="u" rel="up">Autotools Introduction</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">目录</a>][<a href="#Indices" title="Index" rel="index">索引</a>]</p>
+向后：<a href="#Hello-World" accesskey="n" rel="next">Hello World</a>, 向前：<a href="#Use-Cases" accesskey="p" rel="previous">使用实例</a>, 向上：<a href="#Autotools-Introduction" accesskey="u" rel="up">Autotools Introduction</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">目录</a>][<a href="#Indices" title="Index" rel="index">索引</a>]</p>
 </div>
 <a name="How-Autotools-Help"></a>
 <h3 class="section">2.3 How Autotools Help</h3>
@@ -1898,7 +1875,7 @@ Build System yourself (read: write a <samp>configure</samp> script and
 </p>
 <ul>
 <li> As we have seen, the GNU Build System has a lot of
-features (see <a href="#Use-Cases">Use Cases</a>).
+features (see <a href="#Use-Cases">使用实例</a>).
 Some users may expect features you have not implemented because
 you did not need them.
 </li><li> Implementing these features portably is difficult and exhausting.
@@ -16156,8 +16133,8 @@ to permit their use in free software.
 <tr><td></td><td valign="top"><a href="#index-ALLOCA_002c-example"><code>ALLOCA</code>, example</a>:</td><td>&nbsp;</td><td valign="top"><a href="#LIBOBJS">LIBOBJS</a></td></tr>
 <tr><td></td><td valign="top"><a href="#index-ALLOCA_002c-special-handling"><code>ALLOCA</code>, special handling</a>:</td><td>&nbsp;</td><td valign="top"><a href="#LIBOBJS">LIBOBJS</a></td></tr>
 <tr><td></td><td valign="top"><a href="#index-amhello_002d1_002e0_002etar_002egz_002c-creation"><samp>amhello-1.0.tar.gz</samp>, creation</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Hello-World">Hello World</a></td></tr>
-<tr><td></td><td valign="top"><a href="#index-amhello_002d1_002e0_002etar_002egz_002c-location"><samp>amhello-1.0.tar.gz</samp>, location</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Use-Cases">Use Cases</a></td></tr>
-<tr><td></td><td valign="top"><a href="#index-amhello_002d1_002e0_002etar_002egz_002c-use-cases"><samp>amhello-1.0.tar.gz</samp>, use cases</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Use-Cases">Use Cases</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-amhello_002d1_002e0_002etar_002egz_002c-location"><samp>amhello-1.0.tar.gz</samp>, location</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Use-Cases">使用实例</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-amhello_002d1_002e0_002etar_002egz_002c-use-cases"><samp>amhello-1.0.tar.gz</samp>, use cases</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Use-Cases">使用实例</a></td></tr>
 <tr><td></td><td valign="top"><a href="#index-AM_005fCCASFLAGS-and-CCASFLAGS"><code>AM_CCASFLAGS</code> and <code>CCASFLAGS</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#Flag-Variables-Ordering">Flag Variables Ordering</a></td></tr>
 <tr><td></td><td valign="top"><a href="#index-AM_005fCFLAGS-and-CFLAGS"><code>AM_CFLAGS</code> and <code>CFLAGS</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#Flag-Variables-Ordering">Flag Variables Ordering</a></td></tr>
 <tr><td></td><td valign="top"><a href="#index-AM_005fCONDITIONAL-and-SUBDIRS"><code>AM_CONDITIONAL</code> and <code>SUBDIRS</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#Subdirectories-with-AM_005fCONDITIONAL">Subdirectories with AM_CONDITIONAL</a></td></tr>
@@ -16358,7 +16335,7 @@ to permit their use in free software.
 <tr><th><a name="General-Index_cp_letter-F">F</a></th><td></td><td></td></tr>
 <tr><td></td><td valign="top"><a href="#index-false-Example"><code>false</code> Example</a>:</td><td>&nbsp;</td><td valign="top"><a href="#true">true</a></td></tr>
 <tr><td></td><td valign="top"><a href="#index-FCFLAGS-and-AM_005fFCFLAGS"><code>FCFLAGS</code> and <code>AM_FCFLAGS</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#Flag-Variables-Ordering">Flag Variables Ordering</a></td></tr>
-<tr><td></td><td valign="top"><a href="#index-Features-of-the-GNU-Build-System">Features of the GNU Build System</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Use-Cases">Use Cases</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-Features-of-the-GNU-Build-System">Features of the GNU Build System</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Use-Cases">使用实例</a></td></tr>
 <tr><td></td><td valign="top"><a href="#index-FFLAGS-and-AM_005fFFLAGS"><code>FFLAGS</code> and <code>AM_FFLAGS</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#Flag-Variables-Ordering">Flag Variables Ordering</a></td></tr>
 <tr><td></td><td valign="top"><a href="#index-file-names_002c-limitations-on">file names, limitations on</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Limitations-on-File-Names">Limitations on File Names</a></td></tr>
 <tr><td></td><td valign="top"><a href="#index-filename_002dlength_002dmax_003d99"><code>filename-length-max=99</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#List-of-Automake-options">List of Automake options</a></td></tr>
@@ -16386,9 +16363,9 @@ to permit their use in free software.
 <tr><td></td><td valign="top"><a href="#index-gnits-strictness"><samp>gnits</samp> strictness</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Strictness">Strictness</a></td></tr>
 <tr><td></td><td valign="top"><a href="#index-gnu"><code>gnu</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#List-of-Automake-options">List of Automake options</a></td></tr>
 <tr><td></td><td valign="top"><a href="#index-GNU-Build-System_002c-basics">GNU Build System, basics</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Basic-Installation">Basic Installation</a></td></tr>
-<tr><td></td><td valign="top"><a href="#index-GNU-Build-System_002c-features">GNU Build System, features</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Use-Cases">Use Cases</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-GNU-Build-System_002c-features">GNU Build System, features</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Use-Cases">使用实例</a></td></tr>
 <tr><td></td><td valign="top"><a href="#index-GNU-Build-System_002c-introduction">GNU Build System, introduction</a>:</td><td>&nbsp;</td><td valign="top"><a href="#GNU-Build-System">GNU Build System</a></td></tr>
-<tr><td></td><td valign="top"><a href="#index-GNU-Build-System_002c-use-cases">GNU Build System, use cases</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Use-Cases">Use Cases</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-GNU-Build-System_002c-use-cases">GNU Build System, use cases</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Use-Cases">使用实例</a></td></tr>
 <tr><td></td><td valign="top"><a href="#index-GNU-Coding-Standards">GNU Coding Standards</a>:</td><td>&nbsp;</td><td valign="top"><a href="#GNU-Build-System">GNU Build System</a></td></tr>
 <tr><td></td><td valign="top"><a href="#index-GNU-Gettext-support">GNU Gettext support</a>:</td><td>&nbsp;</td><td valign="top"><a href="#gettext">gettext</a></td></tr>
 <tr><td></td><td valign="top"><a href="#index-GNU-make-extensions">GNU make extensions</a>:</td><td>&nbsp;</td><td valign="top"><a href="#General-Operation">General Operation</a></td></tr>
@@ -16815,7 +16792,7 @@ to permit their use in free software.
 <tr><td></td><td valign="top"><a href="#index-UPCFLAGS-and-AM_005fUPCFLAGS"><code>UPCFLAGS</code> and <code>AM_UPCFLAGS</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#Flag-Variables-Ordering">Flag Variables Ordering</a></td></tr>
 <tr><td></td><td valign="top"><a href="#index-UPDATED-Texinfo-flag"><code>UPDATED</code> Texinfo flag</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Texinfo">Texinfo</a></td></tr>
 <tr><td></td><td valign="top"><a href="#index-UPDATED_002dMONTH-Texinfo-flag"><code>UPDATED-MONTH</code> Texinfo flag</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Texinfo">Texinfo</a></td></tr>
-<tr><td></td><td valign="top"><a href="#index-Use-Cases-for-the-GNU-Build-System">Use Cases for the GNU Build System</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Use-Cases">Use Cases</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-Use-Cases-for-the-GNU-Build-System">使用实例 for the GNU Build System</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Use-Cases">使用实例</a></td></tr>
 <tr><td></td><td valign="top"><a href="#index-user-variables">user variables</a>:</td><td>&nbsp;</td><td valign="top"><a href="#User-Variables">User Variables</a></td></tr>
 <tr><td></td><td valign="top"><a href="#index-Using-aclocal">Using <code>aclocal</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#configure">configure</a></td></tr>
 <tr><td></td><td valign="top"><a href="#index-ustar-format">ustar format</a>:</td><td>&nbsp;</td><td valign="top"><a href="#List-of-Automake-options">List of Automake options</a></td></tr>
