@@ -1008,7 +1008,7 @@ Automake 主要关注 <samp>Makefile</samp>s。不依靠这些工具的帮助建
 </td></tr>
 <tr><td align="left" valign="top">&bull; <a href="#config_002esite" accesskey="5">config.site</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">使用一个 config.site 文件
 </td></tr>
-<tr><td align="left" valign="top">&bull; <a href="#VPATH-Builds" accesskey="6">VPATH 构建</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">平行构建树
+<tr><td align="left" valign="top">&bull; <a href="#VPATH-Builds" accesskey="6">VPATH 构建</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">并行构建树
 </td></tr>
 <tr><td align="left" valign="top">&bull; <a href="#Two_002dPart-Install" accesskey="7">两步安装</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">分别安装数据和程序
 </td></tr>
@@ -1276,22 +1276,19 @@ CPPFLAGS=-I$HOME/usr/include LDFLAGS=-L$HOME/usr/lib</kbd>
 <h4 class="subsection">2.2.5 使用 <samp>config.site</samp> 覆盖默认配置</h4>
 <a name="index-config_002esite-example"></a>
 
-<p>When installing several packages using the same setup, it can be
-convenient to create a file to capture common settings.
-If a file named <samp><var>prefix</var>/share/config.site</samp> exists,
-<code>configure</code> will source it at the beginning of its execution.
+<p>当使用同样的设置安装好几个软件包时，创建一个文件获取公用的设置将会很方便。
+如果存在一个名称为 <samp><var>prefix</var>/share/config.site</samp> 的文件，
+<code>configure</code> 将在开始执行时导入它。
 </p>
-<p>Recall the command from the previous section:
+<p>重新执行前面章节的命令：
 </p>
 <div class="example">
 <pre class="example">~/amhello-1.0 % <kbd>./configure --prefix ~/usr CC=gcc-3 \
 CPPFLAGS=-I$HOME/usr/include LDFLAGS=-L$HOME/usr/lib</kbd>
 </pre></div>
 
-<p>Assuming we are installing many package in <samp>~/usr</samp>, and will
-always want to use these definitions of <code>CC</code>, <code>CPPFLAGS</code>, and
-<code>LDFLAGS</code>, we can automate this by creating the following
-<samp>~/usr/share/config.site</samp> file:
+<p>假设我们要在 <samp>~/usr</samp> 安装很多软件包，并且将一直使用这些 <code>CC</code>、<code>CPPFLAGS</code> 和 <code>LDFLAGS</code> 的定义, 
+我们可以通过创建下面这个文件 <samp>~/usr/share/config.site</samp> 来自动化这个过程：
 </p>
 <div class="example">
 <pre class="example">test -z &quot;$CC&quot; &amp;&amp; CC=gcc-3
@@ -1299,9 +1296,8 @@ test -z &quot;$CPPFLAGS&quot; &amp;&amp; CPPFLAGS=-I$HOME/usr/include
 test -z &quot;$LDFLAGS&quot; &amp;&amp; LDFLAGS=-L$HOME/usr/lib
 </pre></div>
 
-<p>Now, any time a <samp>configure</samp> script is using the <samp>~/usr</samp>
-prefix, it will execute the above <samp>config.site</samp> and define
-these three variables.
+<p>之后，任何时候当一个 <samp>configure</samp> 脚本使用 <samp>~/usr</samp>
+前缀，它都会执行上面的 <samp>config.site</samp> 来定义这些变量。
 </p>
 <div class="example">
 <pre class="example">~/amhello-1.0 % <kbd>./configure --prefix ~/usr</kbd>
@@ -1309,47 +1305,35 @@ configure: loading site script /home/adl/usr/share/config.site
 &hellip;
 </pre></div>
 
-<p>See <a href="http://www.gnu.org/software/autoconf/manual/autoconf.html#Site-Defaults">Setting Site Defaults</a> in <cite>The Autoconf
-Manual</cite>, for more information about this feature.
+<p>这个特性的更多信息请参见 <cite>The Autoconf Manual</cite> 中的 <a href="http://www.gnu.org/software/autoconf/manual/autoconf.html#Site-Defaults">设置位置默认值</a>。
 </p>
 
 <hr>
 <a name="VPATH-Builds"></a>
 <div class="header">
 <p>
-向后：<a href="#Two_002dPart-Install" accesskey="n" rel="next">Two-Part Install</a>, 向前：<a href="#config_002esite" accesskey="p" rel="previous">config.site</a>, 向上：<a href="#Use-Cases" accesskey="u" rel="up">使用实例</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">目录</a>][<a href="#Indices" title="Index" rel="index">索引</a>]</p>
+向后：<a href="#Two_002dPart-Install" accesskey="n" rel="next">两步安装</a>, 向前：<a href="#config_002esite" accesskey="p" rel="previous">config.site</a>, 向上：<a href="#Use-Cases" accesskey="u" rel="up">使用实例</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">目录</a>][<a href="#Indices" title="Index" rel="index">索引</a>]</p>
 </div>
 <a name="Parallel-Build-Trees-_0028a_002ek_002ea_002e-VPATH-Builds_0029"></a>
-<h4 class="subsection">2.2.6 Parallel Build Trees (a.k.a. VPATH Builds)</h4>
+<h4 class="subsection">2.2.6 并行构建树 (也叫作 VPATH 构建)</h4>
 <a name="index-Parallel-build-trees"></a>
 <a name="index-VPATH-builds"></a>
 <a name="index-source-tree-and-build-tree"></a>
 <a name="index-build-tree-and-source-tree"></a>
 <a name="index-trees_002c-source-vs_002e-build"></a>
 
-<p>The GNU Build System distinguishes two trees: the source tree, and
-the build tree.
+<p>GNU 构建系统可以区分两个树：源代码树、构建树。
 </p>
-<p>The source tree is rooted in the directory containing
-<samp>configure</samp>.  It contains all the sources files (those that are
-distributed), and may be arranged using several subdirectories.
+<p>源代码树是以含有 <samp>configure</samp> 的目录为根。它包含了所有的源代码文件(那些发布的文件)，并且有可能是用几个子目录组织起来的。
 </p>
-<p>The build tree is rooted in the directory in which <samp>configure</samp>
-was run, and is populated with all object files, programs, libraries,
-and other derived files built from the sources (and hence not
-distributed).  The build tree usually has the same subdirectory layout
-as the source tree; its subdirectories are created automatically by
-the build system.
+<p>构建树是以运行 <samp>configure</samp> 的目录为根，用来存放所有的中间文件、程序、库和其他从源代码构建生成的文件(因此被没有发布)。
+构建树通常和源代码树有相同的子目录结构；它的子目录是由构建系统自动创建的。
 </p>
-<p>If <samp>configure</samp> is executed in its own directory, the source and
-build trees are combined: derived files are constructed in the same
-directories as their sources.  This was the case in our first
-installation example (see <a href="#Basic-Installation">Basic Installation</a>).
+<p>如果 <samp>configure</samp> 在它自己的目录执行，源代码树和构建树就混合在一起：
+生成的文件在和他们源代码相同的目录下被构建。这是我们第一个安装示例中的情况(见 <a href="#Basic-Installation">基本安装</a>)。
 </p>
-<p>A common request from users is that they want to confine all derived
-files to a single directory, to keep their source directories
-uncluttered.  Here is how we could run <samp>configure</samp> to build
-everything in a subdirectory called <samp>build/</samp>.
+<p>一个普遍的用户需求是他们想要限制所有生成的文件在一个单一的目录中，来保持他们的源代码目录不被弄乱。
+这里是我们应该如何运行 <samp>configure</samp> 来在一个叫做 <samp>build/</samp> 的目录下构建所有的东西。
 </p>
 <div class="example">
 <pre class="example">~ % <kbd>tar zxf ~/amhello-1.0.tar.gz</kbd>
@@ -1361,22 +1345,17 @@ everything in a subdirectory called <samp>build/</samp>.
 &hellip;
 </pre></div>
 
-<p>These setups, where source and build trees are different, are often
-called <em>parallel builds</em> or <em>VPATH builds</em>.  The expression
-<em>parallel build</em> is misleading: the word <em>parallel</em> is a
-reference to the way the build tree shadows the source tree, it is not
-about some concurrency in the way build commands are run.  For this
-reason we refer to such setups using the name <em>VPATH builds</em> in
-the following.  <em>VPATH</em> is the name of the <code>make</code> feature
-used by the <samp>Makefile</samp>s to allow these builds (see <a href="http://www.gnu.org/software/make/manual/make.html#General-Search"><code>VPATH</code> Search Path for All Prerequisites</a> in <cite>The
-GNU Make Manual</cite>).
+<p>这些源代码树和构建树不同的设置，通常叫做<em>并行构建</em> 或 <em>VPATH 构建</em>。
+这个说法<em>并行构建</em> 是具有误导性的： 单词 <em>并行</em> 是指构建树和源代码树重叠的方法，而不是构建命令运行的并发性。
+由于这个原因我们在后文中使用 <em>VPATH 构建</em> 来指代这个设置。
+<em>VPATH</em> 是被 <samp>Makefile</samp>s 用来允许这些构建的 <code>make</code> 特性的名称。
+(见 <cite>The GNU Make Manual</cite> 中 <a href="http://www.gnu.org/software/make/manual/make.html#General-Search"><code>VPATH</code> 所有先决条件的搜索路径</a>)。
 </p>
 <a name="index-multiple-configurations_002c-example"></a>
 <a name="index-debug-build_002c-example"></a>
 <a name="index-optimized-build_002c-example"></a>
 
-<p>VPATH builds have other interesting uses.  One is to build the same
-sources with multiple configurations.  For instance:
+<p>VPATH 构建有其他有趣的应用。其中一个是用多种配置构建同一份源代码。比如：
 </p>
 <div class="example">
 <pre class="example">~ % <kbd>tar zxf ~/amhello-1.0.tar.gz</kbd>
@@ -1393,17 +1372,15 @@ sources with multiple configurations.  For instance:
 &hellip;
 </pre></div>
 
-<p>With network file systems, a similar approach can be used to build the
-same sources on different machines.  For instance, suppose that the
-sources are installed on a directory shared by two hosts: <code>HOST1</code>
-and <code>HOST2</code>, which may be different platforms.
+<p>通过网络文件系统，一个简单的方法可以在不同的机器上构建同一份源代码。
+比如，假设源代码在一个文件夹里被两个可能不同平台的主机 <code>HOST1</code> 和 <code>HOST2</code> 共享。
 </p>
 <div class="example">
 <pre class="example">~ % <kbd>cd /nfs/src</kbd>
 /nfs/src % <kbd>tar zxf ~/amhello-1.0.tar.gz</kbd>
 </pre></div>
 
-<p>On the first host, you could create a local build directory:
+<p>在第一个主机上，你可以创建一个本地的构建目录：
 </p><div class="example">
 <pre class="example">[HOST1] ~ % <kbd>mkdir /tmp/amh &amp;&amp; cd /tmp/amh</kbd>
 [HOST1] /tmp/amh % <kbd>/nfs/src/amhello-1.0/configure</kbd>
@@ -1412,12 +1389,10 @@ and <code>HOST2</code>, which may be different platforms.
 ...
 </pre></div>
 
-<p>(Here we assume that the installer has configured <code>sudo</code> so it
-can execute <code>make install</code> with root privileges; it is more convenient
-than using <code>su</code> like in <a href="#Basic-Installation">Basic Installation</a>).
+<p>(这里我们假设安装者已经配置好了 <code>sudo</code> 这样他就可以用root权限执行 <code>make install</code>；
+这比像在 <a href="#Basic-Installation">基本安装</a> 中那样使用 <code>su</code> 要方便多了)。
 </p>
-<p>On the second host, you would do exactly the same, possibly at
-the same time:
+<p>在第二个主机上，你完全可以照做，甚至是同时：
 </p><div class="example">
 <pre class="example">[HOST2] ~ % <kbd>mkdir /tmp/amh &amp;&amp; cd /tmp/amh</kbd>
 [HOST2] /tmp/amh % <kbd>/nfs/src/amhello-1.0/configure</kbd>
@@ -1429,20 +1404,18 @@ the same time:
 <a name="index-read_002donly-source-tree"></a>
 <a name="index-source-tree_002c-read_002donly"></a>
 
-<p>In this scenario, nothing forbids the <samp>/nfs/src/amhello-1.0</samp>
-directory from being read-only.  In fact VPATH builds are also a means
-of building packages from a read-only medium such as a CD-ROM.  (The
-FSF used to sell CD-ROM with unpacked source code, before the GNU
-project grew so big.)
+<p>在这个场景中，没有东西阻止目录 <samp>/nfs/src/amhello-1.0</samp> 变做只读。
+实际上 VPATH 构建也是从一个比如 CD-ROM 的只读介质构建软件包的方法。
+(自由软件基金会在 GNU 项目成长到如此大之前就在销售含有未打包源代码的 CD-ROM。)
 </p>
 <hr>
 <a name="Two_002dPart-Install"></a>
 <div class="header">
 <p>
-向后：<a href="#Cross_002dCompilation" accesskey="n" rel="next">Cross-Compilation</a>, 向前：<a href="#VPATH-Builds" accesskey="p" rel="previous">VPATH Builds</a>, 向上：<a href="#Use-Cases" accesskey="u" rel="up">使用实例</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">目录</a>][<a href="#Indices" title="Index" rel="index">索引</a>]</p>
+向后：<a href="#Cross_002dCompilation" accesskey="n" rel="next">交叉编译</a>, 向前：<a href="#VPATH-Builds" accesskey="p" rel="previous">VPATH 构建</a>, 向上：<a href="#Use-Cases" accesskey="u" rel="up">使用实例</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">目录</a>][<a href="#Indices" title="Index" rel="index">索引</a>]</p>
 </div>
 <a name="Two_002dPart-Installation"></a>
-<h4 class="subsection">2.2.7 Two-Part Installation</h4>
+<h4 class="subsection">2.2.7 两步安装</h4>
 
 <p>In our last example (see <a href="#VPATH-Builds">VPATH Builds</a>), a source tree was shared
 by two hosts, but compilation and installation were done separately on
