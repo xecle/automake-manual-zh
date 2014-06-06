@@ -1010,7 +1010,7 @@ Automake 主要关注 <samp>Makefile</samp>s。不依靠这些工具的帮助建
 </td></tr>
 <tr><td align="left" valign="top">&bull; <a href="#VPATH-Builds" accesskey="6">VPATH 构建</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">并行构建树
 </td></tr>
-<tr><td align="left" valign="top">&bull; <a href="#Two_002dPart-Install" accesskey="7">两步安装</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">分别安装数据和程序
+<tr><td align="left" valign="top">&bull; <a href="#Two_002dPart-Install" accesskey="7">分两部分安装</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">分别安装数据和程序
 </td></tr>
 <tr><td align="left" valign="top">&bull; <a href="#Cross_002dCompilation" accesskey="8">交叉编译</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">编译其他架构体系的版本
 </td></tr>
@@ -1312,7 +1312,7 @@ configure: loading site script /home/adl/usr/share/config.site
 <a name="VPATH-Builds"></a>
 <div class="header">
 <p>
-向后：<a href="#Two_002dPart-Install" accesskey="n" rel="next">两步安装</a>, 向前：<a href="#config_002esite" accesskey="p" rel="previous">config.site</a>, 向上：<a href="#Use-Cases" accesskey="u" rel="up">使用实例</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">目录</a>][<a href="#Indices" title="Index" rel="index">索引</a>]</p>
+向后：<a href="#Two_002dPart-Install" accesskey="n" rel="next">分两部分安装</a>, 向前：<a href="#config_002esite" accesskey="p" rel="previous">config.site</a>, 向上：<a href="#Use-Cases" accesskey="u" rel="up">使用实例</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">目录</a>][<a href="#Indices" title="Index" rel="index">索引</a>]</p>
 </div>
 <a name="Parallel-Build-Trees-_0028a_002ek_002ea_002e-VPATH-Builds_0029"></a>
 <h4 class="subsection">2.2.6 并行构建树 (也叫作 VPATH 构建)</h4>
@@ -1415,42 +1415,28 @@ configure: loading site script /home/adl/usr/share/config.site
 向后：<a href="#Cross_002dCompilation" accesskey="n" rel="next">交叉编译</a>, 向前：<a href="#VPATH-Builds" accesskey="p" rel="previous">VPATH 构建</a>, 向上：<a href="#Use-Cases" accesskey="u" rel="up">使用实例</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">目录</a>][<a href="#Indices" title="Index" rel="index">索引</a>]</p>
 </div>
 <a name="Two_002dPart-Installation"></a>
-<h4 class="subsection">2.2.7 两步安装</h4>
+<h4 class="subsection">2.2.7 分两部分安装</h4>
 
-<p>In our last example (see <a href="#VPATH-Builds">VPATH Builds</a>), a source tree was shared
-by two hosts, but compilation and installation were done separately on
-each host.
+<p>在我们最后一个例子中（见 <a href="#VPATH-Builds">VPATH 构建</a>），一个源代码树被两个主机共享，但是编译和安装过程在每个主机上是分开的。
 </p>
-<p>The GNU Build System also supports networked setups where part of the
-installed files should be shared amongst multiple hosts.  It does so
-by distinguishing architecture-dependent files from
-architecture-independent files, and providing two <samp>Makefile</samp>
-targets to install each of these classes of files.
+<p>GNU 构建系统同样支持通过网络设置把部分被安装的文件给多个主机共享。
+它通过分离依赖架构的和架构无关的文件，
+并且提供两个 <samp>Makefile</samp> 编译目标安装这两类文件来实现这一点的。
 </p>
 <a name="index-install_002dexec"></a>
 <a name="index-install_002ddata"></a>
 
-<p>These targets are <code>install-exec</code> for architecture-dependent files
-and <code>install-data</code> for architecture-independent files.
-The command we used up to now, <code>make install</code>, can be thought of
-as a shorthand for <code>make install-exec install-data</code>.
+<p>依赖架构的文件的编译目标是 <code>install-exec</code>，架构无关文件的编译目标是 <code>install-data</code>。
+我们到目前一直在使用的命令，<code>make install</code>，可以被认为是 <code>make install-exec install-data</code>的一个简写。
 </p>
-<p>From the GNU Build System point of view, the distinction between
-architecture-dependent files and architecture-independent files is
-based exclusively on the directory variable used to specify their
-installation destination.  In the list of directory variables we
-provided earlier (see <a href="#Standard-Directory-Variables">Standard Directory Variables</a>), all the
-variables based on <var>exec-prefix</var> designate architecture-dependent
-directories whose files will be installed by <code>make install-exec</code>.
-The others designate architecture-independent directories and will
-serve files installed by <code>make install-data</code>.  See <a href="#The-Two-Parts-of-Install">The Two Parts of Install</a>, for more details.
+<p>从 GNU 构建系统的立场来看，依赖架构的文件和架构无关文件之间的主要区别是完全基于用来指定他们安装位置的目录变量。
+在我们先前提供的目录变量列表中（见 <a href="#Standard-Directory-Variables">标准目录变量</a>），
+所有基于 <var>exec-prefix</var> 的变量用来指示会被 <code>make install-exec</code> 安装的依赖架构的文件所在的目录。
+其他的用来指示会被 <code>make install-data</code> 安装的架构无关文件所在的目录。见 <a href="#The-Two-Parts-of-Install">安装的两部分</a> 来了解更多详情。
 </p>
-<p>Here is how we could revisit our two-host installation example,
-assuming that (1) we want to install the package directly in
-<samp>/usr</samp>, and (2) the directory <samp>/usr/share</samp> is shared by the
-two hosts.
+<p>现在我们再来看两个主机安装的例子，假设 (1) 我们想把软件包直接安装在 <samp>/usr</samp>，和 (2) 目录 <samp>/usr/share</samp> 是被两个主机共享的。
 </p>
-<p>On the first host we would run
+<p>在第一主机上我们可以运行
 </p><div class="example">
 <pre class="example">[HOST1] ~ % <kbd>mkdir /tmp/amh &amp;&amp; cd /tmp/amh</kbd>
 [HOST1] /tmp/amh % <kbd>/nfs/src/amhello-1.0/configure --prefix /usr</kbd>
@@ -1459,8 +1445,7 @@ two hosts.
 ...
 </pre></div>
 
-<p>On the second host, however, we need only install the
-architecture-specific files.
+<p>然而在第二个主机上，我们只需要安装针对架构的文件。
 </p><div class="example">
 <pre class="example">[HOST2] ~ % <kbd>mkdir /tmp/amh &amp;&amp; cd /tmp/amh</kbd>
 [HOST2] /tmp/amh % <kbd>/nfs/src/amhello-1.0/configure --prefix /usr</kbd>
@@ -1469,9 +1454,8 @@ architecture-specific files.
 ...
 </pre></div>
 
-<p>In packages that have installation checks, it would make sense to run
-<code>make installcheck</code> (see <a href="#Basic-Installation">Basic Installation</a>) to verify that
-the package works correctly despite the apparent partial installation.
+<p>对于有安装检测的软件，运行 <code>make installcheck</code> (见 <a href="#Basic-Installation">基本安装</a>) 
+来验证软件包虽然只进行了部分安装但是可以正确工作是很重要的。
 </p>
 <hr>
 <a name="Cross_002dCompilation"></a>
@@ -1480,39 +1464,34 @@ the package works correctly despite the apparent partial installation.
 向后：<a href="#Renaming" accesskey="n" rel="next">Renaming</a>, 向前：<a href="#Two_002dPart-Install" accesskey="p" rel="previous">Two-Part Install</a>, 向上：<a href="#Use-Cases" accesskey="u" rel="up">使用实例</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">目录</a>][<a href="#Indices" title="Index" rel="index">索引</a>]</p>
 </div>
 <a name="Cross_002dCompilation-1"></a>
-<h4 class="subsection">2.2.8 Cross-Compilation</h4>
+<h4 class="subsection">2.2.8 交叉编译</h4>
 <a name="index-cross_002dcompilation"></a>
 
-<p>To <em>cross-compile</em> is to build on one platform a binary that will
-run on another platform.  When speaking of cross-compilation, it is
-important to distinguish between the <em>build platform</em> on which
-the compilation is performed, and the <em>host platform</em> on which the
-resulting executable is expected to run.  The following
-<code>configure</code> options are used to specify each of them:
+<p><em>交叉编译</em> 是在一个平台上编译会在另一个平台上运行的二进制。
+在讨论交叉编译时，分清楚执行编译的 <em>构建平台</em> 和预期运行生成的可执行程序的 <em>主机平台</em> 是很重要的。
+下面的 <code>configure</code> 选项用来指定他们：
 </p>
 <dl compact="compact">
 <dt><samp>--build=<var>build</var></samp></dt>
 <dd><a name="index-_002d_002dbuild_003dbuild"></a>
-<p>The system on which the package is built.
+<p>用来编译软件包的系统。
 </p></dd>
 <dt><samp>--host=<var>host</var></samp></dt>
 <dd><a name="index-_002d_002dhost_003dhost"></a>
-<p>The system where built programs and libraries will run.
+<p>编译好的程序和库在这个系统上运行。
 </p></dd>
 </dl>
 
-<p>When the <samp>--host</samp> is used, <code>configure</code> will search for
-the cross-compiling suite for this platform.  Cross-compilation tools
-commonly have their target architecture as prefix of their name.  For
-instance my cross-compiler for MinGW32 has its binaries called
-<code>i586-mingw32msvc-gcc</code>, <code>i586-mingw32msvc-ld</code>,
-<code>i586-mingw32msvc-as</code>, etc.
+<p>当使用了 <samp>--host</samp> 时，<code>configure</code> 将会搜索该平台的交叉编译套件。
+交叉编译工具通常用他们的目标架构作为他们名字的前缀。
+比如我的 MinGW32 交叉编译器的二进制叫做
+<code>i586-mingw32msvc-gcc</code>，<code>i586-mingw32msvc-ld</code>，
+<code>i586-mingw32msvc-as</code>，等等。
 </p>
 <a name="index-MinGW-cross_002dcompilation-example"></a>
 <a name="index-cross_002dcompilation-example"></a>
 
-<p>Here is how we could build <code>amhello-1.0</code> for
-<code>i586-mingw32msvc</code> on a GNU/Linux PC.
+<p>这里演示我们如何在 GNU/Linux 电脑上编译用于 <code>i586-mingw32msvc</code> 平台的 <code>amhello-1.0</code>。
 </p>
 <div class="smallexample">
 <pre class="smallexample">~/amhello-1.0 % <kbd>./configure --build i686-pc-linux-gnu --host i586-mingw32msvc</kbd>
@@ -1537,42 +1516,35 @@ checking for i586-mingw32msvc-gcc option to accept ANSI C...
 hello.exe: MS Windows PE 32-bit Intel 80386 console executable not relocatable
 </pre></div>
 
-<p>The <samp>--host</samp> and <samp>--build</samp> options are usually all we
-need for cross-compiling.  The only exception is if the package being
-built is itself a cross-compiler: we need a third option to specify
-its target architecture.
+<p><samp>--host</samp> 和 <samp>--build</samp> 选项通常已经足够我们用来进行交叉编译。
+唯一例外的情况是正在编译的软件包本身是一个交叉编译器：我们需要第三个选项来指定它的目标架构。
 </p>
 <dl compact="compact">
 <dt><samp>--target=<var>target</var></samp></dt>
 <dd><a name="index-_002d_002dtarget_003dtarget"></a>
-<p>When building compiler tools: the system for which the tools will
-create output.
+<p>当构建编译器工具时：该编译工具产生的输出文件适用的系统。
 </p></dd>
 </dl>
 
-<p>For instance when installing GCC, the GNU Compiler Collection, we can
-use <samp>--target=<var>target</var></samp> to specify that we want to build
-GCC as a cross-compiler for <var>target</var>.  Mixing <samp>--build</samp> and
-<samp>--target</samp>, we can actually cross-compile a cross-compiler;
-such a three-way cross-compilation is known as a <em>Canadian cross</em>.
+<p>比如在安装 GCC —— GNU 编译器集 时，我们可以使用 <samp>--target=<var>target</var></samp> 来指定我们希望构建 GCC 作为一个针对 <var>target</var> 平台的交叉编译器。混合 <samp>--build</samp> 和
+<samp>--target</samp>，我们可以交叉编译出一个交叉编译器；
+这样的三路交叉编译被称作 <em>加拿大交叉</em>。(译注：“加拿大交叉”这个说法是因为当年讨论这个问题时加拿大有三个政党)
 </p>
-<p>See <a href="http://www.gnu.org/software/autoconf/manual/autoconf.html#Specifying-Names">Specifying the System Type</a> in <cite>The
-Autoconf Manual</cite>, for more information about these <code>configure</code>
-options.
+<p>见 <cite>The Autoconf Manual</cite> 中 <a href="http://www.gnu.org/software/autoconf/manual/autoconf.html#Specifying-Names">指定系统类型</a> 来了解这些 <code>configure</code> 选项的更多信息。
 </p>
 <hr>
 <a name="Renaming"></a>
 <div class="header">
 <p>
-向后：<a href="#DESTDIR" accesskey="n" rel="next">DESTDIR</a>, 向前：<a href="#Cross_002dCompilation" accesskey="p" rel="previous">Cross-Compilation</a>, 向上：<a href="#Use-Cases" accesskey="u" rel="up">使用实例</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">目录</a>][<a href="#Indices" title="Index" rel="index">索引</a>]</p>
+向后：<a href="#DESTDIR" accesskey="n" rel="next">目的位置</a>, 向前：<a href="#Cross_002dCompilation" accesskey="p" rel="previous">交叉编译</a>, 向上：<a href="#Use-Cases" accesskey="u" rel="up">使用实例</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">目录</a>][<a href="#Indices" title="Index" rel="index">索引</a>]</p>
 </div>
 <a name="Renaming-Programs-at-Install-Time"></a>
-<h4 class="subsection">2.2.9 Renaming Programs at Install Time</h4>
+<h4 class="subsection">2.2.9 安装时重命名程序</h4>
 <a name="index-Renaming-programs"></a>
 <a name="index-Transforming-program-names"></a>
 <a name="index-Programs_002c-renaming-during-installation"></a>
 
-<p>The GNU Build System provides means to automatically rename
+<pGNU Build System provides means to automatically rename
 executables and manpages before they are installed (see <a href="#Man-Pages">Man Pages</a>).
 This is especially convenient
 when installing a GNU package on a system that already has a
