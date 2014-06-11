@@ -1597,16 +1597,13 @@ hello.exe: MS Windows PE 32-bit Intel 80386 console executable not relocatable
 
 <p><code>DESTDIR</code> 变量可以被用来进行一个阶段性安装。
 软件包应该可以被配置为是否将被安装到最终位置
-(例如，<code>--prefix /usr</code>)，但是当执行 <code>make install</code> 时，the <code>DESTDIR</code> should be set to
-the absolute name of a directory into which the installation will be
-diverted.  From this directory it is easy to review which files are
-being installed where, and finally copy them to their final location
-by some means.
+(例如，<code>--prefix /usr</code>)，但是当执行 <code>make install</code> 时，
+<code>DESTDIR</code> 应该设置成安装结果想要转移到的目录的绝对路径。
+从这个目录下很容易查看哪个文件安装在哪里，最后通过一些方式拷贝他们到最终位置。
 </p>
 <a name="index-Binary-package"></a>
 
-<p>For instance here is how we could create a binary package containing a
-snapshot of all the files to be installed.
+<p>这里我们以创建一个包含所有已安装文件快照的二进制包为例。
 </p>
 <div class="example">
 <pre class="example">~/amhello-1.0 % <kbd>./configure --prefix /usr</kbd>
@@ -1622,52 +1619,46 @@ snapshot of all the files to be installed.
 ./usr/share/doc/amhello/README
 </pre></div>
 
-<p>After this example, <code>amhello-1.0-i686.tar.gz</code> is ready to be
-uncompressed in <samp>/</samp> on many hosts.  (Using <code>`cat ../files.lst`</code>
-instead of &lsquo;<samp>.</samp>&rsquo; as argument for <code>tar</code> avoids entries for
-each subdirectory in the archive: we would not like <code>tar</code> to
-restore the modification time of <samp>/</samp>, <samp>/usr/</samp>, etc.)
+<p>在这个例子之后，<code>amhello-1.0-i686.tar.gz</code> 只要解压其他主机的 <samp>/</samp> 就可以使用。
+(使用 <code>`cat ../files.lst`</code> 代替 &lsquo;<samp>.</samp>&rsquo; 作为 <code>tar</code> 的参数来避免每一个子文件夹在压缩包中的条目：
+我们不想让 <code>tar</code> 还原 <samp>/</samp>、<samp>/usr/</samp>等文件夹的最后修改时间)
+(译注：只打包文件而不打包文件夹，防止解压缩时更新系统目录文件夹的最后修改时间。原文表述太复杂)
 </p>
-<p>Note that when building packages for several architectures, it might
-be convenient to use <code>make install-data</code> and <code>make
-install-exec</code> (see <a href="#Two_002dPart-Install">Two-Part Install</a>) to gather
-architecture-independent files in a single package.
+<p>需要注意，当为不同的架构编译软件包时，使用 <code>make install-data</code> 和 <code>make
+install-exec</code> (见 <a href="#Two_002dPart-Install">分两部分安装</a>) 来收集架构无关文件到一个单独的包中是很方便的。
 </p>
-<p>See <a href="#Install">Install</a>, for more information.
+<p>见 <a href="#Install">安装</a> 了解更多信息。
 </p>
 
 <hr>
 <a name="Preparing-Distributions"></a>
 <div class="header">
 <p>
-向后：<a href="#Dependency-Tracking" accesskey="n" rel="next">Dependency Tracking</a>, 向前：<a href="#DESTDIR" accesskey="p" rel="previous">DESTDIR</a>, 向上：<a href="#Use-Cases" accesskey="u" rel="up">使用实例</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">目录</a>][<a href="#Indices" title="Index" rel="index">索引</a>]</p>
+向后：<a href="#Dependency-Tracking" accesskey="n" rel="next">跟踪依赖关系</a>, 向前：<a href="#DESTDIR" accesskey="p" rel="previous">DESTDIR</a>, 向上：<a href="#Use-Cases" accesskey="u" rel="up">使用实例</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">目录</a>][<a href="#Indices" title="Index" rel="index">索引</a>]</p>
 </div>
 <a name="Preparing-Distributions-1"></a>
-<h4 class="subsection">2.2.11 Preparing Distributions</h4>
+<h4 class="subsection">2.2.11 分发准备</h4>
 <a name="index-Preparing-distributions"></a>
 <a name="index-Packages_002c-preparation"></a>
 <a name="index-Distributions_002c-preparation"></a>
 
-<p>We have already mentioned <code>make dist</code>.  This target collects all
-your source files and the necessary parts of the build system to
-create a tarball named <samp><var>package</var>-<var>version</var>.tar.gz</samp>.
+<p>我们已经提到过 <code>make dist</code>。这个目标收集所有你的源文件和构建系统必须的部分来创建一个命名为 <samp><var>package</var>-<var>version</var>.tar.gz</samp> 的压缩包。
 </p>
 <a name="index-distcheck-better-than-dist"></a>
 
-<p>Another, more useful command is <code>make distcheck</code>.  The
-<code>distcheck</code> target constructs
-<samp><var>package</var>-<var>version</var>.tar.gz</samp> just as well as <code>dist</code>,
-but it additionally ensures most of the use cases presented so far
-work:
+<p>另外一个很有用的命令是 <code>make distcheck</code>。
+<code>distcheck</code> 目标和 <code>dist</code> 创建一样的
+<samp><var>package</var>-<var>version</var>.tar.gz</samp>，
+但是额外它的可以保证大部分已有的用例正常工作：
 </p>
 <ul>
-<li> It attempts a full compilation of the package (see <a href="#Basic-Installation">Basic Installation</a>), unpacking the newly constructed tarball, running
-<code>make</code>, <code>make check</code>, <code>make install</code>, as well as
-<code>make installcheck</code>, and even <code>make dist</code>,
-</li><li> it tests VPATH builds with read-only source tree (see <a href="#VPATH-Builds">VPATH Builds</a>),
-</li><li> it makes sure <code>make clean</code>, <code>make distclean</code>, and <code>make
-uninstall</code> do not omit any file (see <a href="#Standard-Targets">Standard Targets</a>),
-</li><li> and it checks that <code>DESTDIR</code> installations work (see <a href="#DESTDIR">DESTDIR</a>).
+<li>它尝试完整编译一次软件包 (见 <a href="#Basic-Installation">基本安装</a>)，解压缩新创建的压缩包，运行
+<code>make</code>、<code>make check</code>、<code>make install</code> 以及
+<code>make installcheck</code>，甚至是 <code>make dist</code>，
+</li><li>它使用只读的源代码树来测试 VPATH 构建 (见 <a href="#VPATH-Builds">VPATH 构建</a>)，
+</li><li>它保证 <code>make clean</code>、<code>make distclean</code>，和 <code>make
+uninstall</code> 不会遗漏任何文件 (见 <a href="#Standard-Targets">标准目标</a>)，
+</li><li>并且它会检查 <code>DESTDIR</code> 安装正常工作 (见 <a href="#DESTDIR">DESTDIR</a>)。
 </li></ul>
 
 <p>All of these actions are performed in a temporary subdirectory, so
