@@ -2041,7 +2041,7 @@ hello_SOURCES = main.c
 任何这样的目录变量（删去 <code>dir</code> 前缀）都可以被放在一个要素前面来告诉 <code>automake</code> 把列出的文件安装到哪里。</p>
 <p>程序需要从源文件构建，因此对每一个列在 <code><span class="nolinebreak">_PROGRAMS</span><!-- /@w --></code> 要素中的程序 <code><var>prog</var></code> ，
 <code>automake</code> 会寻找另一个命名为 <code><var>prog</var>_SOURCES</code> 列出来它的源文件的变量。可能会有不止一个源文件：他们都会被编译和链接在一起。</p>
-<p>当创建一个源码压缩包（不同于构建好的程序）时 Automakealso 也知道需要发布的源文件。因此这个 <code>hello_SOURCES</code> 声明的一个副作用是 <samp>main.c</samp> 将会是 <code>make dist</code> 创建的源码压缩包的一部分。</p>
+<p>当创建一个源码压缩包（不同于构建好的程序）时，Automake 也知道需要发布的源文件。因此这个 <code>hello_SOURCES</code> 声明的一个副作用是 <samp>main.c</samp> 将会是 <code>make dist</code> 创建的源码压缩包的一部分。</p>
 <p>最后是一些关于顶层 <samp>Makefile.am</samp> 的解释。
 </p>
 <div class="example">
@@ -2050,21 +2050,9 @@ dist_doc_DATA = README
 </pre></div>
 
 <p><code>SUBDIRS</code> 是一个列出了所有 <code>make</code> 在处理当前目录前应该递归进入的文件夹列表的特殊变量。虽然我们从顶层目录运行 <code>make</code>，这一行让它构建 <samp>src/hello</samp>。这一行同样让 <code>make install</code> 在安装 <samp>README</samp> 之前安装 <samp>src/hello</samp>（虽然这个顺序不重要）。</p>
-<p><code>dist_doc_DATA = README</code> 这一行让 <samp>README</samp> 会被发布并被安装到 <var>docdir</var>。
-Files listed with the
-<code>_DATA</code> 要素列出的文件并不会自动成为用 <code>make dist</code> 构建的源码压缩包的一部分，so we add the <code>dist_</code> prefix so they get
-distributed.  However, for <samp>README</samp> it would not have been
-necessary: <code>automake</code> automatically distributes any
-<samp>README</samp> file it encounters (the list of other files
-automatically distributed is presented by <code>automake --help</code>).
-The only important effect of this second line is therefore to install
-<samp>README</samp> during <code>make install</code>.
-</p>
-<p>One thing not covered in this example is accessing the installation
-directory values (see <a href="#Standard-Directory-Variables">Standard Directory Variables</a>) from your
-program code, that is, converting them into defined macros.  For this,
-see <a href="http://www.gnu.org/software/autoconf/manual/autoconf.html#Defining-Directories">Defining Directories</a> in <cite>The Autoconf Manual</cite>.
-</p>
+<p><code>dist_doc_DATA = README</code> 这一行让 <samp>README</samp> 会被发布并被安装到 <var>docdir</var>。<code>_DATA</code> 要素列出的文件并不会自动成为用 <code>make dist</code> 构建的源码压缩包的一部分，因此我们添加 <code>dist_</code> 前缀来保证他们被发布。然而对于 <samp>README</samp> 来说，这是不必要的：<code>automake</code> 自动发布所有它遇到的 <samp>README</samp> 文件（其他会被自动发布的文件列表可以用 <code>automake --help</code>查看）。
+第二行唯一重要的作用是因此在 <code>make install</code> 过程中安装 <samp>README</samp>。</p>
+<p>这个例子没有覆盖到的一件事情是从你的程序代码中访问安装目录（见 <a href="#Standard-Directory-Variables">标准目录变量</a>），即，把他们转化为已经定义的宏。对于这点，见<cite>Autoconf 手册</cite> 中 <a href="http://www.gnu.org/software/autoconf/manual/autoconf.html#Defining-Directories">定义目录</a>。</p>
 
 <hr>
 <a name="Generalities"></a>
@@ -2073,26 +2061,17 @@ see <a href="http://www.gnu.org/software/autoconf/manual/autoconf.html#Defining-
 向后：<a href="#Examples" accesskey="n" rel="next">Examples</a>, 向前：<a href="#Autotools-Introduction" accesskey="p" rel="previous">Autotools Introduction</a>, 向上：<a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">目录</a>][<a href="#Indices" title="Index" rel="index">索引</a>]</p>
 </div>
 <a name="General-ideas"></a>
-<h2 class="chapter">3 General ideas</h2>
+<h2 class="chapter">3 梗概</h2>
 
-<p>The following sections cover a few basic ideas that will help you
-understand how Automake works.
-</p>
+<p>下面的章节覆盖了大部分可以帮你理解 Automake 如何工作的基本理念。</p>
 <table class="menu" border="0" cellspacing="0">
-<tr><td align="left" valign="top">&bull; <a href="#General-Operation" accesskey="1">General Operation</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">General operation of Automake
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="#Strictness" accesskey="2">Strictness</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Standards conformance checking
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="#Uniform" accesskey="3">Uniform</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">The Uniform Naming Scheme
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="#Length-Limitations" accesskey="4">Length Limitations</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Staying below the command line length limit
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="#Canonicalization" accesskey="5">Canonicalization</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How derived variables are named
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="#User-Variables" accesskey="6">User Variables</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Variables reserved for the user
-</td></tr>
-<tr><td align="left" valign="top">&bull; <a href="#Auxiliary-Programs" accesskey="7">Auxiliary Programs</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Programs automake might require
-</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="#General-Operation" accesskey="1">一般性操作</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Automake 的一般性操作</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="#Strictness" accesskey="2">严格性</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">标准检验</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="#Uniform" accesskey="3">一致性</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">统一命名计划</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="#Length-Limitations" accesskey="4">长度限制</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">保持在命令行长度限制以内</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="#Canonicalization" accesskey="5">标准化</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">衍生变量如何命名</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="#User-Variables" accesskey="6">用户变量</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">保留给用户的变量</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="#Auxiliary-Programs" accesskey="7">辅助性程序</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Automake 可能会需要的程序</td></tr>
 </table>
 
 
@@ -2100,56 +2079,29 @@ understand how Automake works.
 <a name="General-Operation"></a>
 <div class="header">
 <p>
-向后：<a href="#Strictness" accesskey="n" rel="next">Strictness</a>, 向上：<a href="#Generalities" accesskey="u" rel="up">Generalities</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">目录</a>][<a href="#Indices" title="Index" rel="index">索引</a>]</p>
+向后：<a href="#Strictness" accesskey="n" rel="next">严格性</a>, 向上：<a href="#Generalities" accesskey="u" rel="up">概要</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">目录</a>][<a href="#Indices" title="Index" rel="index">索引</a>]</p>
 </div>
 <a name="General-Operation-1"></a>
-<h3 class="section">3.1 General Operation</h3>
+<h3 class="section">3.1 一般性操作</h3>
 
-<p>Automake works by reading a <samp>Makefile.am</samp> and generating a
-<samp>Makefile.in</samp>.  Certain variables and rules defined in the
-<samp>Makefile.am</samp> instruct Automake to generate more specialized code;
-for instance, a <code>bin_PROGRAMS</code> variable definition will cause rules
-for compiling and linking programs to be generated.
-</p>
+<p>Automake 通过读入 <samp>Makefile.am</samp> 并生成一个 <samp>Makefile.in</samp>来工作。
+<samp>Makefile.am</samp> 定义了确定的变量和规则来控制 Automake 生成专门的代码；比如，一个 <code>bin_PROGRAMS</code> 变量的定义说明编译和链接目标程序的规则。</p>
 <a name="index-Non_002dstandard-targets"></a>
 <a name="index-git_002ddist_002c-non_002dstandard-example"></a>
 <a name="index-git_002ddist"></a>
 
-<p>The variable definitions and rules in the <samp>Makefile.am</samp> are
-copied mostly verbatim into the generated file, with all variable
-definitions preceding all rules.  This allows you to add almost
-arbitrary code into the generated <samp>Makefile.in</samp>.  For instance,
-the Automake distribution includes a non-standard rule for the
-<code>git-dist</code> target, which the Automake maintainer uses to make
-distributions from the source control system.
-</p>
+<p><samp>Makefile.am</samp> 中的变量定义和规则大多数被逐字的拷贝到生成的文件中，所有变量定义在全部规则之前。这允许你添加几乎任意代码到生成的 <samp>Makefile.in</samp> 中。比如，Automake 软件包的发布中包含一个针对 <code>git-dist</code> 目标的非标准规则，被 Automake 软件包的维护者用来从源码控制系统中生成发布。</p>
 <a name="index-GNU-make-extensions"></a>
 
-<p>Note that most GNU make extensions are not recognized by Automake.  Using
-such extensions in a <samp>Makefile.am</samp> will lead to errors or confusing
-behavior.
-</p>
+<p>需要注意的是大部分的 GNU make 扩展不能被Automake识别。在<samp>Makefile.am</samp>中使用这样的扩展会导致错误或者有歧义的行为。</p>
 <a name="index-Append-operator"></a>
 <a name="index-_002b_003d"></a>
-<p>A special exception is that the GNU make append operator, &lsquo;<samp>+=</samp>&rsquo;, is
-supported.  This operator appends its right hand argument to the variable
-specified on the left.  Automake will translate the operator into
-an ordinary &lsquo;<samp>=</samp>&rsquo; operator; &lsquo;<samp>+=</samp>&rsquo; will thus work with any make program.
-</p>
-<p>Automake tries to keep comments grouped with any adjoining rules or
-variable definitions.
-</p>
+<p>一个特殊的例外是 GNU make 追加操作，&lsquo;<samp>+=</samp>&rsquo;，是被支持的。这个操作追加它右侧的操作数到左侧指定的变量中。Automake 会把这个操作翻译为普通的 &lsquo;<samp>=</samp>&rsquo; 操作，&lsquo;<samp>+=</samp>&rsquo; 可以那样対任何make程序生效。</p>
+<p>Automake 尽量让注释和临近的规则或变量定义分组在一起。</p>
 <a name="index-Limitations-of-automake-parser"></a>
 <a name="index-Automake-parser_002c-limitations-of"></a>
 <a name="index-indentation-in-Makefile_002eam"></a>
-<p>Generally, Automake is not particularly smart in the parsing of unusual
-Makefile constructs, so you&rsquo;re advised to avoid fancy constructs or
-&ldquo;creative&rdquo; use of whitespaces.
-For example, <tt class="key">TAB</tt> characters cannot be used between a target name
-and the following &ldquo;<code>:</code>&rdquo; character, and variable assignments
-shouldn&rsquo;t be indented with <tt class="key">TAB</tt> characters.
-Also, using more complex macro in target names can cause trouble:
-</p>
+<p>一般来说，Automake 在分析多余的 Makefile 结构时不够聪明，因此你最好避免多余的结构或者随意使用空白。比如，<tt class="key">TAB</tt> 字符不能用在一个目标名和随后的  &ldquo;<code>:</code>&rdquo; 字符之间，以及变量声明不能用 <tt class="key">TAB</tt> 字符对齐。同样，在目标名中使用过于复杂的宏也会引起麻烦：</p>
 <div class="example">
 <pre class="example">% <kbd>cat Makefile.am</kbd>
 $(FOO:=x): bar
@@ -2163,48 +2115,29 @@ Makefile.am:1: ':='-style assignments are not portable
 <a name="index-Overriding-make-rules"></a>
 <a name="index-Overriding-make-targets"></a>
 
-<p>A rule defined in <samp>Makefile.am</samp> generally overrides any such
-rule of a similar name that would be automatically generated by
-<code>automake</code>.  Although this is a supported feature, it is generally
-best to avoid making use of it, as sometimes the generated rules are
-very particular.
-</p>
+<p><samp>Makefile.am</samp> 中定义的规则通常会覆盖所有 <code>automake</code> 自动生成的具有相同名称的规则。虽然这个特征是支持的，但是通常应该尽量避免利用这点，因为有时候生成的规则时非常特殊的。</p>
 <a name="index-Variables_002c-overriding"></a>
 <a name="index-Overriding-make-variables"></a>
 
-<p>Similarly, a variable defined in <samp>Makefile.am</samp> or
-<code>AC_SUBST</code>ed from <samp>configure.ac</samp> will override any
-definition of the variable that <code>automake</code> would ordinarily
-create.  This feature is more often useful than the ability to
-override a rule.  Be warned that many of the variables generated by
-<code>automake</code> are considered to be for internal use only, and their
-names might change in future releases.
-</p>
+<p>类似的，<samp>Makefile.am</samp> 中定义的变量或者来自 <samp>configure.ac</samp> 中 <code>AC_SUBST</code> 定义的变量会覆盖所有 <code>automake</code> 原本创建的变量。这一点比覆盖一个规则更有用。需要注意的是 <code>automake</code> 生成的变量被认为只作内部使用，并且它们的名称可能在以后的版本中发生变化。</p>
 <a name="index-Recursive-operation-of-Automake"></a>
 <a name="index-Automake_002c-recursive-operation"></a>
 <a name="index-Example-of-recursive-operation"></a>
 
-<p>When examining a variable definition, Automake will recursively examine
-variables referenced in the definition.  For example, if Automake is
-looking at the content of <code>foo_SOURCES</code> in this snippet
-</p>
+<p>当检查一个变量的定义时，Automake 会递归检查定义中的变量引用。例如，当 Automake 寻找下面这一小段中 <code>foo_SOURCES</code> 的内容时</p>
 <div class="example">
 <pre class="example">xs = a.c b.c
 foo_SOURCES = c.c $(xs)
 </pre></div>
 
-<p>it would use the files <samp>a.c</samp>, <samp>b.c</samp>, and <samp>c.c</samp> as the
-contents of <code>foo_SOURCES</code>.
+<p>它应该使用文件 <samp>a.c</samp>、<samp>b.c</samp> 和 <samp>c.c</samp> 作为 <code>foo_SOURCES</code> 的内容。
 </p>
 <a name="index-_0023_0023-_0028special-Automake-comment_0029"></a>
 <a name="index-Special-Automake-comment"></a>
 <a name="index-Comment_002c-special-to-Automake"></a>
 
-<p>Automake also allows a form of comment that is <em>not</em> copied into
-the output; all lines beginning with &lsquo;<samp>##</samp>&rsquo; (leading spaces allowed)
-are completely ignored by Automake.
-</p>
-<p>It is customary to make the first line of <samp>Makefile.am</samp> read:
+<p>Automake 也允许一种<em>不</em>被拷贝到输出中的注释形式，所有以 &lsquo;<samp>##</samp>&rsquo;(允许行首空白)开头的行都会被 Automake 完全忽略。</p>
+<p>惯例是让 <samp>Makefile.am</samp> 的第一行是这样：
 </p>
 <a name="index-Makefile_002eam_002c-first-line"></a>
 <a name="index-First-line-of-Makefile_002eam"></a>
@@ -2220,17 +2153,14 @@ are completely ignored by Automake.
 <a name="Strictness"></a>
 <div class="header">
 <p>
-向后：<a href="#Uniform" accesskey="n" rel="next">Uniform</a>, 向前：<a href="#General-Operation" accesskey="p" rel="previous">General Operation</a>, 向上：<a href="#Generalities" accesskey="u" rel="up">Generalities</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">目录</a>][<a href="#Indices" title="Index" rel="index">索引</a>]</p>
+向后：<a href="#Uniform" accesskey="n" rel="next">一致性</a>, 向前：<a href="#General-Operation" accesskey="p" rel="previous">一般性操作</a>, 向上：<a href="#Generalities" accesskey="u" rel="up">梗概</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">目录</a>][<a href="#Indices" title="Index" rel="index">索引</a>]</p>
 </div>
 <a name="Strictness-1"></a>
-<h3 class="section">3.2 Strictness</h3>
+<h3 class="section">3.2 严格性</h3>
 
 <a name="index-Non_002dGNU-packages"></a>
 
-<p>While Automake is intended to be used by maintainers of GNU packages, it
-does make some effort to accommodate those who wish to use it, but do
-not want to use all the GNU conventions.
-</p>
+<p>当 Automake 预期被 GNU 软件包的维护者使用时，它做了一些改动来适应那些希望使用它的人，但是并不想使用所有的 GNU 约定。</p>
 <a name="index-Strictness_002c-defined"></a>
 <a name="index-Strictness_002c-foreign"></a>
 <a name="index-foreign-strictness"></a>
@@ -2239,15 +2169,12 @@ not want to use all the GNU conventions.
 <a name="index-Strictness_002c-gnits"></a>
 <a name="index-gnits-strictness"></a>
 
-<p>To this end, Automake supports three levels of <em>strictness</em>&mdash;the
-strictness indicating how stringently Automake should check standards
-conformance.
-</p>
-<p>The valid strictness levels are:
+<p>最终，Automake 支持三级<em>严格性</em>&mdash;严格性指明 Automake 检查标准一致性的严格程度。</p>
+<p>支持的严格性等级有：
 </p>
 <dl compact="compact">
 <dt><samp>foreign</samp></dt>
-<dd><p>Automake will check for only those things that are absolutely
+<dd><p>Automake 将只检查那些对于正当操作绝对需要的东西。比如，will check for only those things that are absolutely
 required for proper operations.  For instance, whereas GNU standards
 dictate the existence of a <samp>NEWS</samp> file, it will not be required in
 this mode.  This strictness will also turn off some warnings by default
