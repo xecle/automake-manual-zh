@@ -2174,49 +2174,37 @@ foo_SOURCES = c.c $(xs)
 </p>
 <dl compact="compact">
 <dt><samp>foreign</samp></dt>
-<dd><p>Automake 将只检查那些对于正当操作绝对需要的东西。比如，will check for only those things that are absolutely
-required for proper operations.  For instance, whereas GNU standards
-dictate the existence of a <samp>NEWS</samp> file, it will not be required in
-this mode.  This strictness will also turn off some warnings by default
-(among them, portability warnings).
-The name comes from the fact that Automake is intended to be
-used for GNU programs; these relaxed rules are not the standard mode of
-operation.
+<dd><p>Automake 将只检查那些对于正当操作绝对需要的东西。比如，虽然 GNU 标准规定需要存在一个
+<samp>NEWS</samp> 文件，但是它在这个模式下并不需要。这个严格性将默认关闭一些警告（其中一些是可移植性警告）。
+这个名称来源于 Automake 预期被使用于 GNU 软件包的事实；这些宽松的规则不是操作的标准模式。
 </p>
 </dd>
 <dt><samp>gnu</samp></dt>
-<dd><p>Automake will check&mdash;as much as possible&mdash;for compliance to the GNU
-standards for packages.  This is the default.
+<dd><p>Automake 将 &mdash;尽可能多的&mdash; 检查软件包是否遵守 GNU 标准。这是默认的等级。
 </p>
 </dd>
 <dt><samp>gnits</samp></dt>
-<dd><p>Automake will check for compliance to the as-yet-unwritten <em>Gnits
-standards</em>.  These are based on the GNU standards, but are even more
-detailed.  Unless you are a Gnits standards contributor, it is
-recommended that you avoid this option until such time as the Gnits
-standard is actually published (which may never happen).
+<dd><p>Automake 将会按照尚未编写的 <em>Gnits 标准</em> 进行检查。这以 GNU
+标准为基础，但是增加了更多细节。除非你是一个 Gnits 标准的开发者，否则建议你避免使用这个选项直到 Gnits 标准正式发布（这或许永远不会发生）。
 </p></dd>
 </dl>
 
-<p>See <a href="#Gnits">Gnits</a>, for more information on the precise implications of the
-strictness level.
+<p>见 <a href="#Gnits">Gnits</a>，来了解更多关于这个严格性具体实现的信息。
 </p>
 
 <hr>
 <a name="Uniform"></a>
 <div class="header">
 <p>
-向后：<a href="#Length-Limitations" accesskey="n" rel="next">Length Limitations</a>, 向前：<a href="#Strictness" accesskey="p" rel="previous">Strictness</a>, 向上：<a href="#Generalities" accesskey="u" rel="up">Generalities</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">目录</a>][<a href="#Indices" title="Index" rel="index">索引</a>]</p>
+向后：<a href="#Length-Limitations" accesskey="n" rel="next">长度限制</a>, 向前：<a href="#Strictness" accesskey="p" rel="previous">严格性</a>, 向上：<a href="#Generalities" accesskey="u" rel="up">梗概</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">目录</a>][<a href="#Indices" title="Index" rel="index">索引</a>]</p>
 </div>
 <a name="The-Uniform-Naming-Scheme"></a>
-<h3 class="section">3.3 The Uniform Naming Scheme</h3>
+<h3 class="section">3.3 统一命名规范</h3>
 
 <a name="index-Uniform-naming-scheme"></a>
 
-<p>Automake variables generally follow a <em>uniform naming scheme</em> that
-makes it easy to decide how programs (and other derived objects) are
-built, and how they are installed.  This scheme also supports
-<code>configure</code> time determination of what should be built.
+<p>Automake 变量一般遵守一个 <em>统一命名规范</em> 以更容易的决定程序（以及其它衍生对象）如何被构建和如何被安装。
+这个规范同样支持在 <code>configure</code> 时确定哪些应该被构建。
 </p>
 <a name="index-_005fPROGRAMS-primary-variable"></a>
 <a name="index-PROGRAMS-primary-variable"></a>
@@ -2224,13 +2212,10 @@ built, and how they are installed.  This scheme also supports
 <a name="index-Primary-variable_002c-defined"></a>
 <a name="index-_005fPROGRAMS"></a>
 
-<p>At <code>make</code> time, certain variables are used to determine which
-objects are to be built.  The variable names are made of several pieces
-that are concatenated together.
+<p>在 <code>make</code> 时，一些特定的变量被用来确定哪些对象将被构建。
+这些变量的名称由几部分连接在一起组成的。
 </p>
-<p>The piece that tells <code>automake</code> what is being built is commonly called
-the <em>primary</em>.  For instance, the primary <code>PROGRAMS</code> holds a
-list of programs that are to be compiled and linked.
+<p>告诉 <code>automake</code> 在构建什么的部分通常被称作 <em>前缀</em>。比如，<code>PROGRAMS</code> 前缀记录着一个将要被编译和连接的程序列表。
 <a name="index-PROGRAMS"></a>
 </p>
 <a name="index-pkgdatadir_002c-defined"></a>
